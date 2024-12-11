@@ -7,14 +7,17 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
+// use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+// use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé.')]
-#[UniqueEntity(fields: ['username'], message: 'Ce nom d\'utilisateur est déjà pris.')]
-class User implements PasswordAuthenticatedUserInterface
+// #[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé.')]
+// #[UniqueEntity(fields: ['username'], message: 'Ce nom d\'utilisateur est déjà pris.')]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,31 +25,31 @@ class User implements PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Assert\Email(message: 'L\'email {{ value }} n\'est pas valide.')]
+    // #[Assert\Email(message: 'L\'email {{ value }} n\'est pas valide.')]
     private ?string $email = null;
 
-    #[Assert\Length(min: 8, minMessage: 'Le mot de passe doit faire au moins {{ limit }} caractères')]
-    #[Assert\Regex(
-        pattern: '/[A-Z]/',
-        match: true,
-        message: 'Le mot de passe doit contenir au moins une lettre majuscule.'
-    )]
-    #[Assert\Regex(
-        pattern: '/\d/',
-        match: true,
-        message: 'Le mot de passe doit contenir au moins un chiffre.'
-    )]
-    #[Assert\Regex(
-        pattern: '/[\W_]/',
-        match: true,
-        message: 'Le mot de passe doit contenir au moins un caractère spécial.'
-    )]
+    // #[Assert\Length(min: 8, minMessage: 'Le mot de passe doit faire au moins {{ limit }} caractères')]
+    // #[Assert\Regex(
+    //     pattern: '/[A-Z]/',
+    //     match: true,
+    //     message: 'Le mot de passe doit contenir au moins une lettre majuscule.'
+    // )]
+    // #[Assert\Regex(
+    //     pattern: '/\d/',
+    //     match: true,
+    //     message: 'Le mot de passe doit contenir au moins un chiffre.'
+    // )]
+    // #[Assert\Regex(
+    //     pattern: '/[\W_]/',
+    //     match: true,
+    //     message: 'Le mot de passe doit contenir au moins un caractère spécial.'
+    // )]
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Assert\NotBlank(message: 'Le nom d\'utilisateur ne peut pas être vide.')]
-    #[Assert\Length(min: 3, minMessage: 'Le nom d\'utilisateur doit comporter au moins {{ limit }} caractères.')]
+    // #[Assert\NotBlank(message: 'Le nom d\'utilisateur ne peut pas être vide.')]
+    // #[Assert\Length(min: 3, minMessage: 'Le nom d\'utilisateur doit comporter au moins {{ limit }} caractères.')]
     private ?string $username = null;
 
     #[ORM\Column(length: 255)]
@@ -63,6 +66,12 @@ class User implements PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedat = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $resetToken = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $resetTokenExpiresAt = null;
 
     #[ORM\Column(type: "json")]
     private array $roles = [];
@@ -174,6 +183,28 @@ class User implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
+        return $this;
+    }
+
+    public function getResetTokenExpiresAt(): ?\DateTimeInterface
+    {
+        return $this->resetTokenExpiresAt;
+    }
+
+    public function setResetTokenExpiresAt(?\DateTimeInterface $expiresAt): self
+    {
+        $this->resetTokenExpiresAt = $expiresAt;
+        return $this;
+    }
+
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -197,5 +228,20 @@ class User implements PasswordAuthenticatedUserInterface
     public function getReviews(): Collection
     {
         return $this->reviews;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
     }
 }

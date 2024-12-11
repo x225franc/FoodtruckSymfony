@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Panel
+{% endblock %}
+
+{% block body %}
+	<div
+		style="display: flex; justify-content: space-between; align-items: center;">
+		<!-- Admin Header -->
+		<div>
+			<div class="vertical-menu">
+				<div data-simplebar class="h-100">
+					<div id="sidebar-menu">
+						<ul class="metismenu list-unstyled" id="side-menu">
+							<li>
+								<!-- Logo -->
+								<a href="/admin" class="waves-effect" style="display: flex; justify-content: center; align-items: center;">
+									<img src="{{ asset('images/logo_nobg.png') }}" alt="foodtruck" height="45" style="cursor: pointer;">
+								</a>
+
+								<!-- Modération des comptes -->
+								<a href="#" class="waves-effect" title="Modération des comptes">
+									<i class="fas fa-user-circle"></i>
+								</a>
+
+								<!-- Modération des annonces -->
+								<a href="#" class="waves-effect" title="Modération des annonces">
+									<i class="fas fa-ad"></i>
+								</a>
+
+								<!-- Modération des signalements -->
+								<a href="#" class="waves-effect" title="Modération des signalements">
+									<i class="fas fa-exclamation-triangle"></i>
+								</a>
+
+								<!-- Modération des évaluations utilisateurs -->
+								<a href="#" class="waves-effect" title="Modération des évaluations utilisateurs">
+									<i class="fas fa-star"></i>
+								</a>
+
+                            
+                                <div class="image mr-3" style="position: absolute; bottom: 6px; width: 100%; display: flex; justify-content: center;">
+                                <a href="/" class="waves-effect" title="Accueil">
+                                <i class="fas fa-home"></i>
+                                </a>
+                                </div>
+                            </li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Main Content -->
+		<div style="flex-grow: 1; margin: 35px 35px 45px 90px;">
+			{% block admin_body %}{% endblock %}
+		</div>
+	</div>
+
+
+	<!-- Admin Footer -->
+	<footer style="position: fixed; bottom: 0; width: 100%; padding: 7px; border-top: 1px solid #f1f1f1; background-color: #fcfcfc;" class="d-flex align-items-center">
+		<div style="margin-left: 4vw;">
+			<div style="padding: 2px;">
+				<i class="text-muted text-center" style="font-size: 9px;">
+					FoodTruck ©
+					{{ "now"|date("Y") }}
+					Tout droits réservés.</i>
+			</div>
+		</div>
+	</footer>
+{% endblock %}

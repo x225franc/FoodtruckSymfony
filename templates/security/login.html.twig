@@ -1,32 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion{% endblock %}
+{% block title %}Connexion
+{% endblock %}
 
 {% block body %}
-    <h1>Connexion</h1>
+	<h1>Connexion</h1>
 
-    {% if error %}
-        <div class="alert alert-danger">
-            {{ error.messageKey|trans(error.messageData, 'security') }}
-        </div>
-    {% endif %}
+	<form action="{{ path('login') }}" method="post">
+		<div class="form-group">
+			<label for="Nom d'utilisateur">Nom d'utilisateur</label>
+			<input type="text" id="username" name="_username" value="{{ last_username }}" required="required" class="form-control" placeholder="Nom d'utilisateur" autocomplete="username" autofocus>
+		</div>
 
-    <form action="{{ path('app_login') }}" method="post">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="_username" value="{{ last_email }}" required="required" class="form-control" autocomplete="username" autofocus>
-        </div>
+		<div class="form-group">
+			<label for="password">Mot de passe</label>
+			<input type="password" id="password" name="_password" placeholder="Mot de passe" required="required" class="form-control" autocomplete="current-password">
+		</div>
 
-        <div class="form-group">
-            <label for="password">Mot de passe</label>
-            <input type="password" id="password" name="_password" required="required" class="form-control" autocomplete="current-password">
-        </div>
 
-        <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="remember_me" name="_remember_me" value="on">
-            <label class="form-check-label" for="remember_me">Se souvenir de moi</label>
-        </div>
+		<button type="submit" class="btn btn-primary">Se connecter</button>
+	</form>
 
-        <button type="submit" class="btn btn-primary">Se connecter</button>
-    </form>
-{% endblock %}
+	<a class="text-red-600 cursor-pointer transition hover:text-red-700 hover:scale-105" href="{{ path('forgotpassword') }}">
+		Vous avez oubliez votre mot de passe ?
+	</a>
+<br>
+	<a class="text-red-600 cursor-pointer transition hover:text-red-700 hover:scale-105" href="{{ path('register') }}">
+		Vous n'avez pas de compte ? Inscrivez-vous
+
+		<script>
+			// script permettant d'empecher le renvoie de formulaire
+if (window.history.replaceState) {
+window.history.replaceState(null, null, window.location.href);
+}
+		</script>
+
+	{% endblock %}

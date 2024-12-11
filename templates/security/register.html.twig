@@ -6,29 +6,27 @@
     <div class="container">
         <h1>Créer un compte</h1>
 
-        {# Afficher les messages flash (succès, erreurs) #}
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
-        {% for message in app.flashes('error') %}
-            <div class="alert alert-danger">
-                {{ message }}
-            </div>
-        {% endfor %}
-
         {# Afficher le formulaire d'inscription #}
         {{ form_start(registrationForm) }}
-            {{ form_row(registrationForm.email) }}
-            {{ form_row(registrationForm.password) }}
             {{ form_row(registrationForm.username) }}
             {{ form_row(registrationForm.firstname) }}
             {{ form_row(registrationForm.lastname) }}
+            {{ form_row(registrationForm.email) }}
             {{ form_row(registrationForm.phone) }}
+            {{ form_row(registrationForm.password) }}
             
 
             <button class="btn btn-primary" type="submit">S'inscrire</button>
         {{ form_end(registrationForm) }}
+
+        <a class="text-red-600 cursor-pointer transition hover:text-red-700 hover:scale-105" href="{{ path('login') }}">
+            Vous avez déjà un compte ? Connectez-vous
     </div>
+
+        <script>
+        // script permettant d'empecher le renvoie de formulaire 
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
 {% endblock %}

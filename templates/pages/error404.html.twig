@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page introuvable{% endblock %}
+
+{% block body %}
+    <h1>Oups ! Page introuvable (404)</h1>
+    <p>La page que vous cherchez n'existe pas ou a été déplacée.</p>
+    <a href="{{ path('home') }}">Retour à l'accueil</a>
+{% endblock %}
