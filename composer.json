@@ -7,14 +7,25 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/dbal": "^3",
+        "doctrine/doctrine-bundle": "^2.13",
+        "doctrine/doctrine-migrations-bundle": "^3.3",
+        "doctrine/orm": "^3.3",
+        "fakerphp/faker": "^1.24",
+        "php-flasher/flasher-symfony": "^2.1",
+        "symfony/asset": "^7.2",
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",
         "symfony/flex": "^2",
+        "symfony/form": "7.2.*",
         "symfony/framework-bundle": "7.2.*",
+        "symfony/mailer": "7.2.*",
+        "symfony/monolog-bundle": "^3.0",
         "symfony/runtime": "7.2.*",
+        "symfony/security-bundle": "7.2.*",
+        "symfony/twig-bundle": "7.2.*",
+        "symfony/validator": "7.2.*",
         "symfony/yaml": "7.2.*"
-    },
-    "require-dev": {
     },
     "config": {
         "allow-plugins": {
@@ -65,5 +76,13 @@
             "allow-contrib": false,
             "require": "7.2.*"
         }
+    },
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^4.0",
+        "nelmio/alice": "^3.13",
+        "symfony/debug-bundle": "7.2.*",
+        "symfony/maker-bundle": "^1.61",
+        "symfony/stopwatch": "7.2.*",
+        "symfony/web-profiler-bundle": "7.2.*"
     }
 }

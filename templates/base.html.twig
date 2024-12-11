@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    </head>
+    <body>
+        <header>
+            <nav>
+                <!-- Navigation links -->
+            </nav>
+        </header>
+
+        <main>
+            {% block body %}{% endblock %}
+        </main>
+
+        <footer>
+            <!-- Footer content -->
+        </footer>
+
+        <script src="{{ asset('js/app.js') }}"></script>
+    </body>
+</html>
