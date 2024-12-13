@@ -89,6 +89,13 @@
 			</footer>
 		{% endif %}
 
+                <script>
+        // script permettant d'empecher le renvoie de formulaire 
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->

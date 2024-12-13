@@ -64,9 +64,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdat = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $updatedat = null;
-
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $resetToken = null;
 
@@ -87,7 +84,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->orders = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->createdat = new \DateTime();
-        $this->updatedat = new \DateTime();
     }
 
     public function getId(): ?int
@@ -169,17 +165,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedat(\DateTimeInterface $createdat): static
     {
         $this->createdat = $createdat;
-        return $this;
-    }
-
-    public function getUpdatedat(): ?\DateTimeInterface
-    {
-        return $this->updatedat;
-    }
-
-    public function setUpdatedat(\DateTimeInterface $updatedat): static
-    {
-        $this->updatedat = $updatedat;
         return $this;
     }
 

@@ -1,20 +1,79 @@
 {% extends 'base.admin.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Admin Panel
+{% endblock %}
 
 {% block admin_body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<style>
+		.admin-home-wrapper {
+			padding: 20px;
+		}
+		.admin-home-title {
+			color: #61c087;
+			margin-bottom: 20px;
+		}
+		.admin-home-subtitle {
+			color: #757575;
+			line-height: 1.6;
+		}
+		.admin-home-list {
+			margin-top: 20px;
+		}
+		.admin-home-list a {
+			display: block;
+			margin-bottom: 10px;
+			color: #000;
+			text-decoration: none;
+		}
+		.admin-home-list a:hover {
+			color: #61c087;
+		}
+		.admin-home-image {
+			width: 60%;
+			height: auto;
+			margin-top: 20px;
+		}
+	</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/laragon/www/FoodTruckSymfony/src/Controller/AdminController.php</code></li>
-        <li>Your template at <code>C:/laragon/www/FoodTruckSymfony/templates/admin/index.html.twig</code></li>
-    </ul>
-</div>
+	<div class="row justify-content-center admin-home-wrapper">
+		<h2 class="admin-home-title">Bienvenue sur le panel admin Foodtruck !</h2>
+		<h4 class="admin-home-subtitle">
+			<br>
+			Dans ce panel, vous pouvez gérer :
+			<br/><br/>
+			<div class="admin-home-list">
+				<a href="/admin/user" class="waves-effect" title="Modération des comptes">
+					<i class="fas fa-user-circle"></i>
+					Modération des comptes
+				</a>
+				<a href="/admin/category" class="waves-effect" title="Modération des catégories">
+					<i class="fas fa-list"></i>
+					Modération des catégories
+				</a>
+				<a href="/admin/product" class="waves-effect" title="Modération des produits">
+					<i class="fas fa-utensils"></i>
+					Modération des produits
+				</a>
+				<a href="#" class="waves-effect" title="Modération des menus">
+					<i class="fas fa-concierge-bell"></i>
+					Modération des menus
+				</a>
+				<a href="#" class="waves-effect" title="Modération des évaluations utilisateurs">
+					<i class="fas fa-star"></i>
+					Modération des évaluations utilisateurs
+				</a>
+				<a href="#" class="waves-effect" title="Demande de contact">
+					<i class="fas fa-envelope"></i>
+					Demande de contact
+				</a>
+			</div>
+			<br/>
+			Vous pouvez commencer en sélectionnant une des options dans le menu de gauche.
+		</h4>
+		<div class="col-md-8 col-xl-6 text-center">
+			<div>
+				<img src="{{ asset('images/coming-soon.svg') }}" alt="img" class="img-fluid admin-home-image"/>
+			</div>
+		</div>
+	</div>
 {% endblock %}

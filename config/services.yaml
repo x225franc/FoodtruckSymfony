@@ -1,7 +1,7 @@
 # services.yaml
 
 parameters:
-    # Paramètres à définir ici si nécessaire
+    images_directory: '%kernel.project_dir%/public/images'
 
 services:
     # default configuration for services in *this* file
@@ -13,6 +13,10 @@ services:
     App\EventListener\ExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, priority: 10 }
+
+    App\EventListener\LoginListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login', method: 'onSecurityInteractiveLogin' }
 
     # services pour les autres classes de votre application
     App\:

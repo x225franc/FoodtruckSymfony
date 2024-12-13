@@ -16,7 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Validator\ConstraintViolation;
 
 class SecurityController extends AbstractController
 {
@@ -171,7 +170,7 @@ class SecurityController extends AbstractController
                 $resetPasswordUrl = $this->generateUrl('resetpassword', ['token' => $resetToken], UrlGeneratorInterface::ABSOLUTE_URL);
 
                 $emailMessage = (new Email())
-                    ->from('serviceclientdealo@gmail.com.com')
+                    ->from($_ENV['MAIL_USER'])
                     ->to($email)
                     ->subject('Réinitialisation de votre mot de passe')
                     ->html('<p>Cliquez sur le lien pour réinitialiser votre mot de passe : <a href="' . $resetPasswordUrl . '">Réinitialiser</a></p>');
