@@ -1,0 +1,26 @@
+<header class="bg-blue-500 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <a class="text-white text-xl font-bold" href="{{ path('home') }}">My Website</a>
+        <button class="text-white block lg:hidden" id="navbar-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="navbar">
+            <ul class="lg:flex lg:justify-between text-white">
+                <li class="lg:px-4 py-2">
+                    <a class="hover:text-gray-400" href="{{ path('home') }}">Home</a>
+                </li>
+                <li class="lg:px-4 py-2">
+                    <a class="hover:text-gray-400" href="#">About</a>
+                </li>
+                <li class="lg:px-4 py-2">
+                    <a class="hover:text-gray-400" href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+<script>
+    document.getElementById('navbar-toggle').addEventListener('click', function() {
+        document.getElementById('navbar').classList.toggle('hidden');
+    });
+</script>

@@ -14,9 +14,13 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, priority: 10 }
 
-    App\EventListener\LoginListener:
+    App\Security\UserChecker:
         tags:
-            - { name: 'kernel.event_listener', event: 'security.interactive_login', method: 'onSecurityInteractiveLogin' }
+            - { name: 'security.user_checker' }
+
+    App\EventListener\UserChecker:
+        tags:
+            - { name: 'security.user_checker' }
 
     # services pour les autres classes de votre application
     App\:

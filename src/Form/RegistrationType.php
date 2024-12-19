@@ -17,23 +17,41 @@ class RegistrationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', EmailType::class)
+            ->add('username', TextType::class, [
+                'label' => 'Nom d\'utilisateur',
+                'attr' => ['placeholder' => 'Votre nom d\'utilisateur']
+            ])
+            ->add('firstname', TextType::class, [
+                'label' => 'Prénom',
+                'attr' => ['placeholder' => 'Votre prénom']
+            ])
+            ->add('lastname', TextType::class, [
+                'label' => 'Nom',
+                'attr' => ['placeholder' => 'Votre nom']
+            ])
+            ->add('email', EmailType::class, [
+                'label' => 'Email',
+                'attr' => ['placeholder' => 'Votre adresse email']
+            ])
+            ->add('phone', TelType::class, [
+                'label' => 'Téléphone',
+                'attr' => [
+                    'placeholder' => 'Votre numéro de téléphone',
+                    'pattern' => '[0-9]{10}',
+                    'maxlength' => 10
+                ]
+            ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
-                    'label' => 'Password',
+                    'label' => 'Mot de passe',
                     'attr' => ['placeholder' => 'Votre mot de passe']
                 ],
                 'second_options' => [
-                    'label' => 'Confirm password',
+                    'label' => 'Confirmez le mot de passe',
                     'attr' => ['placeholder' => 'Confirmez votre mot de passe']
                 ],
-                'invalid_message' => 'Les mots de passe doivent correspondre.'
-            ])
-            ->add('username', TextType::class)
-            ->add('firstname', TextType::class)
-            ->add('lastname', TextType::class)
-            ->add('phone', TelType::class);
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

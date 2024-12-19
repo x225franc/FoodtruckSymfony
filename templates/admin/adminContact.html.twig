@@ -1,0 +1,85 @@
+{% extends 'base.admin.html.twig' %}
+
+{% block title %}
+    Messages - Admin
+{% endblock %}
+
+{% block admin_content %}
+    <div class="p-6">
+        <h2 class="text-2xl font-bold text-green-600 mb-6">
+            Messages de Contact
+        </h2>
+        <h4 class="text-gray-600 mb-6">
+            Liste des messages reçus via le formulaire de contact
+        </h4>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="w-full">
+                {% if contacts|length >= 1 %}
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    ID
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Sujet
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Message
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Email
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Date
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for contact in contacts %}
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ contact.id }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ contact.subject }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        <div class="max-w-xs overflow-hidden">
+                                            {{ contact.message|slice(0, 100) }}
+                                            {% if contact.message|length > 100 %}
+                                                ...
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ contact.email }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ contact.createdAt|date('d/m/Y H:i') }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="mailto:{{ contact.email }}?subject=Re: {{ contact.subject|url_encode }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+                                            <i class="fas fa-reply mr-2"></i>
+                                            Répondre
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="text-center py-8">
+                        <p class="text-gray-500 text-lg">
+                            Aucun message de contact trouvé
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

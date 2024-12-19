@@ -16,49 +16,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 
 class SecurityController extends AbstractController
 {
-    #[Route('/register', name: 'register')]
-    public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
-    {
-        if ($this->getUser()) {
-            return $this->redirectToRoute('home');
-        }
-
-        $user = new User();
-        $form = $this->createForm(RegistrationType::class, $user);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $errors = $this->validateRegistration($user, $entityManager, $validator);
-
-            if (count($errors) > 0) {
-                foreach ($errors as $error) {
-                    $this->addFlash('error', $error);
-                }
-            } else {
-                // Hash du mot de passe
-                $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
-                $user->setPassword($hashedPassword);
-
-                $user->setRoles(['ROLE_USER']); // Par défaut, l'utilisateur a le rôle ROLE_USER
-
-                $entityManager->persist($user);
-                $entityManager->flush();
-
-                // Message de succès
-                $this->addFlash('success', 'Votre compte a été créé avec succès.');
-
-                return $this->redirectToRoute('home');
-            }
-        }
-
-        return $this->render('security/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
-    }
 
     private function validateRegistration(User $user, EntityManagerInterface $entityManager, ValidatorInterface $validator): array
     {
@@ -112,6 +73,48 @@ class SecurityController extends AbstractController
         return $errors;
     }
 
+    #[Route('/register', name: 'register')]
+    public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
+    {
+        // Redirige l'utilisateur connecté vers la page d'accueil
+        if ($this->getUser()) {
+            return $this->redirectToRoute('home');
+        }
+
+        $user = new User();
+        $form = $this->createForm(RegistrationType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $errors = $this->validateRegistration($user, $entityManager, $validator);
+
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
+                    $this->addFlash('error', $error);
+                }
+            } else {
+                // Hash du mot de passe
+                $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
+                $user->setPassword($hashedPassword);
+
+                $user->setRoles(['ROLE_USER']); // Par défaut, l'utilisateur a le rôle ROLE_USER
+
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // Message de succès
+                $this->addFlash('success', 'Votre compte a été créé avec succès.');
+
+                return $this->redirectToRoute('home');
+            }
+        }
+
+        return $this->render('security/register.html.twig', [
+            'registrationForm' => $form->createView(),
+        ]);
+    }
+
     #[Route('/login', name: 'login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -127,13 +130,23 @@ class SecurityController extends AbstractController
 
         // Ajoute le flash uniquement en cas d'erreur
         if ($error) {
-            $this->addFlash('error', 'Connexion échouée, veuillez vérifier vos identifiants.');
+            if ($error instanceof CustomUserMessageAuthenticationException && $error->getMessageKey() === 'Votre compte a été banni. Vous ne pouvez pas vous connecter.') {
+                return $this->redirectToRoute('banned');
+            } else {
+                $this->addFlash('error', 'Connexion échouée, veuillez vérifier vos identifiants.');
+            }
         }
 
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);
+    }
+
+    #[Route('/banned', name: 'banned')]
+    public function banned(): Response
+    {
+        return $this->render('security/banned.html.twig', [], new Response('', 401));
     }
 
     #[Route("/logout", name: "logout")]
@@ -221,5 +234,11 @@ class SecurityController extends AbstractController
         return $this->render('security/resetpassword.html.twig', [
             'token' => $token,
         ]);
+    }
+
+    #[Route('/access-denied', name: 'access_denied')]
+    public function accessDenied(): Response
+    {
+        return $this->render('security/access_denied.html.twig');
     }
 }

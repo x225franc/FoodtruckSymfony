@@ -1,82 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin Panel
-{% endblock %}
+{% block title %}Admin Panel{% endblock %}
 
 {% block body %}
-	<div
-		style="display: flex; justify-content: space-between; align-items: center;">
-		<!-- Admin Header -->
-		<div>
-			<div class="vertical-menu">
-				<div data-simplebar class="h-100">
-					<div id="sidebar-menu">
-						<ul class="metismenu list-unstyled" id="side-menu">
-							<li>
-								<!-- Logo -->
-								<a href="/admin" class="waves-effect" style="display: flex; justify-content: center; align-items: center;">
-									<img src="{{ asset('images/logo_nobg.png') }}" alt="foodtruck" height="45" style="cursor: pointer;">
-								</a>
+<div class="flex min-h-screen bg-gray-100">
+    <!-- Sidebar -->
+    <div class="w-12 bg-gray-800 text-white flex flex-col">
+        <div class="flex items-center justify-center h-16">
+            <a href="/admin">
+                <img src="{{ asset('images/logo_nobg.png') }}" alt="foodtruck" class="h-12">
+            </a>
+        </div>
+        <div class="flex flex-col items-center flex-1">
+            <ul class="flex flex-col items-center w-full">
+                <li>
+                    <a href="/admin/user" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des comptes">
+                        <i class="fas fa-user-circle"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/category" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des catégories">
+                        <i class="fas fa-list"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/product" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des produits">
+                        <i class="fas fa-utensils"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/menu" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des menus">
+                        <i class="fas fa-concierge-bell"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/review" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des évaluations">
+                        <i class="fas fa-star"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/contact" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Demandes de contact">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </li>
+                <li class="mt-auto">
+                    <a href="/" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Retourner à l'accueil">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
-								<!-- Modération des comptes -->
-								<a href="/admin/user" class="waves-effect" title="Modération des comptes">
-									<i class="fas fa-user-circle"></i>
-								</a>
+    <!-- Main Content -->
+    <div class="flex-1">
+        {% block admin_content %}{% endblock %}
+    </div>
+</div>
 
-								<!-- Modération des catégories -->
-								<a href="/admin/category" class="waves-effect" title="Modération des catégories">
-									<i class="fas fa-list"></i>
-								</a>
-
-								<!-- Modération des produits -->
-								<a href="/admin/product" class="waves-effect" title="Modération des produits">
-									<i class="fas fa-utensils"></i>
-								</a>
-
-                                <!-- Modération des menus aliments -->
-                                <a href="#" class="waves-effect" title="Modération des menus">
-                                    <i class="fas fa-concierge-bell"></i>
-                                </a>
-
-								<!-- Modération des évaluations utilisateurs -->
-								<a href="#" class="waves-effect" title="Modération des évaluations utilisateurs">
-									<i class="fas fa-star"></i>
-								</a>
-
-                                <!-- Mails de contact -->
-								<a href="#" class="waves-effect" title="Demande de contact">
-									<i class="fas fa-envelope"></i>
-								</a>
-
-
-								<div class="image mr-3" style="position: absolute; bottom: 6px; width: 100%; display: flex; justify-content: center;">
-									<a href="/" class="waves-effect" title="Accueil">
-										<i class="fas fa-home"></i>
-									</a>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Main Content -->
-		<div style="flex-grow: 1; margin: 35px 35px 45px 90px;">
-			{% block admin_body %}{% endblock %}
-		</div>
-	</div>
-
-
-	<!-- Admin Footer -->
-	<footer style="position: fixed; bottom: 0; width: 100%; padding: 7px; border-top: 1px solid #f1f1f1; background-color: #fcfcfc;" class="d-flex align-items-center">
-		<div style="margin-left: 4vw;">
-			<div style="padding: 2px;">
-				<i class="text-muted text-center" style="font-size: 9px;">
-					FoodTruck ©
-					{{ "now"|date("Y") }}
-					Tout droits réservés.</i>
-			</div>
-		</div>
-	</footer>
+<!-- Footer -->
+<footer class="bg-gray-800 text-white p-4 text-center">
+    &copy; {{ "now"|date("Y") }} FoodTruck. Tous droits réservés.
+</footer>
 {% endblock %}

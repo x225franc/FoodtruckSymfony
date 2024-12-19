@@ -1,79 +1,43 @@
 {% extends 'base.admin.html.twig' %}
 
-{% block title %}Admin Panel
-{% endblock %}
+{% block title %}Accueil - Admin{% endblock %}
 
-{% block admin_body %}
-	<style>
-		.admin-home-wrapper {
-			padding: 20px;
-		}
-		.admin-home-title {
-			color: #61c087;
-			margin-bottom: 20px;
-		}
-		.admin-home-subtitle {
-			color: #757575;
-			line-height: 1.6;
-		}
-		.admin-home-list {
-			margin-top: 20px;
-		}
-		.admin-home-list a {
-			display: block;
-			margin-bottom: 10px;
-			color: #000;
-			text-decoration: none;
-		}
-		.admin-home-list a:hover {
-			color: #61c087;
-		}
-		.admin-home-image {
-			width: 60%;
-			height: auto;
-			margin-top: 20px;
-		}
-	</style>
-
-	<div class="row justify-content-center admin-home-wrapper">
-		<h2 class="admin-home-title">Bienvenue sur le panel admin Foodtruck !</h2>
-		<h4 class="admin-home-subtitle">
-			<br>
-			Dans ce panel, vous pouvez gérer :
-			<br/><br/>
-			<div class="admin-home-list">
-				<a href="/admin/user" class="waves-effect" title="Modération des comptes">
-					<i class="fas fa-user-circle"></i>
-					Modération des comptes
-				</a>
-				<a href="/admin/category" class="waves-effect" title="Modération des catégories">
-					<i class="fas fa-list"></i>
-					Modération des catégories
-				</a>
-				<a href="/admin/product" class="waves-effect" title="Modération des produits">
-					<i class="fas fa-utensils"></i>
-					Modération des produits
-				</a>
-				<a href="#" class="waves-effect" title="Modération des menus">
-					<i class="fas fa-concierge-bell"></i>
-					Modération des menus
-				</a>
-				<a href="#" class="waves-effect" title="Modération des évaluations utilisateurs">
-					<i class="fas fa-star"></i>
-					Modération des évaluations utilisateurs
-				</a>
-				<a href="#" class="waves-effect" title="Demande de contact">
-					<i class="fas fa-envelope"></i>
-					Demande de contact
-				</a>
-			</div>
-			<br/>
-			Vous pouvez commencer en sélectionnant une des options dans le menu de gauche.
-		</h4>
-		<div class="col-md-8 col-xl-6 text-center">
-			<div>
-				<img src="{{ asset('images/coming-soon.svg') }}" alt="img" class="img-fluid admin-home-image"/>
-			</div>
-		</div>
-	</div>
+{% block admin_content %}
+    <div class="p-6">
+        <h2 class="text-2xl font-bold text-green-600 mb-6">Bienvenue sur le panel admin Foodtruck !</h2>
+        <div class="text-gray-600 leading-relaxed mb-6">
+            <p class="mb-4">Dans ce panel, vous pouvez gérer :</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <a href="/admin/user" class="flex items-center p-4 bg-white rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-user-circle text-green-600 text-xl mr-3"></i>
+                    <span>Modération des comptes</span>
+                </a>
+                <a href="/admin/category" class="flex items-center p-4 bg-white rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-list text-green-600 text-xl mr-3"></i>
+                    <span>Modération des catégories</span>
+                </a>
+                <a href="/admin/product" class="flex items-center p-4 bg-white rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-utensils text-green-600 text-xl mr-3"></i>
+                    <span>Modération des produits</span>
+                </a>
+                <a href="/admin/menu" class="flex items-center p-4 bg-white rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-concierge-bell text-green-600 text-xl mr-3"></i>
+                    <span>Modération des menus</span>
+                </a>
+                <a href="/admin/review" class="flex items-center p-4 bg-white rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-star text-green-600 text-xl mr-3"></i>
+                    <span>Modération des évaluations utilisateurs</span>
+                </a>
+                <a href="/admin/contact" class="flex items-center p-4 bg-white rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-envelope text-green-600 text-xl mr-3"></i>
+                    <span>Demandes de contact</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="flex justify-center">
+            <img src="{{ asset('images/coming-soon.svg') }}" alt="img" class="w-2/5 h-auto mt-6"/>
+        </div>
+    </div>
 {% endblock %}

@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProfileController!
+{% block title %}
+	Hello ProfileController!
 {% endblock %}
 
 {% block body %}
@@ -17,17 +18,24 @@
 		}
 	</style>
 
-	<div class="example-wrapper">
-		<h1>Hello
-			{{ controller_name }}! ✅</h1>
+	<div	class="example-wrapper">
+		<h1>
+			Hello
+			{{ controller_name }}
+			! ✅
+		</h1>
 
 		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-			<a class="flex items-center space-x-2 py-1 group hover:border-r-4 hover:border-r-red-600 hover:font-semibold" href="{{ path('logout') }}">
-				<span>Déconnexion</span>
+			<a	class="flex items-center space-x-2 py-1 group hover:border-r-4 hover:border-r-red-600 hover:font-semibold"	href="{{ path('logout') }}">
+				<span>
+					Déconnexion
+				</span>
 			</a>
 		{% else %}
-			<a class="flex items-center space-x-2 py-1 group hover:border-r-4 hover:border-r-red-600 hover:font-semibold" href="{{ path('login') }}">
-				<span>Connexion</span>
+			<a	class="flex items-center space-x-2 py-1 group hover:border-r-4 hover:border-r-red-600 hover:font-semibold"	href="{{ path('login') }}">
+				<span>
+					Connexion
+				</span>
 			</a>
 		{% endif %}
 	</div>

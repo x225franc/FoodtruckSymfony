@@ -1,78 +1,81 @@
 {% extends 'base.admin.html.twig' %}
 
-{% block title %}Admin Panel{% endblock %}
+{% block title %}
+    Utilisateurs - Admin
+{% endblock %}
 
-{% block admin_body %}
-<style>
-    .admin-users-wrapper {
-        padding: 20px;
-    }
-    .admin-users-title {
-        color: #61c087;
-        margin-bottom: 20px;
-    }
-    .admin-users-subtitle {
-        color: #757575;
-        line-height: 1.6;
-    }
-    .admin-users-list {
-        margin-top: 20px;
-    }
-    .admin-users-list a {
-        display: block;
-        margin-bottom: 10px;
-        color: #000;
-        text-decoration: none;
-    }
-    .admin-users-list a:hover {
-        color: #61c087;
-    }
-    .admin-users-image {
-        width: 60%;
-        height: auto;
-        margin-top: 20px;
-    }
-</style>
-
-<div class="row justify-content-center admin-users-wrapper">
-    <h2 class="admin-users-title">Modération des comptes utilisateurs</h2>
-    <h4 class="admin-users-subtitle">
-        Il s'agit de la liste des utilisateurs inscrits sur Dealo, vous pouvez prendre des actions sur ces utilisateurs.
-    </h4>
-    <div class="rounded-3 shadow-lg" style="min-width: 63vw;">
-        <div class="card-body">
-            <h4 class="card-title">Liste des utilisateurs</h4>
-            <p class="card-title-desc">
+{% block admin_content %}
+    <div class="p-6">
+        <h2 class="text-2xl font-bold text-green-600 mb-6">
+            Modération des comptes utilisateurs
+        </h2>
+        <h4 class="text-gray-600 mb-6">
+            Il s'agit de la liste des utilisateurs inscrits sur Dealo, vous pouvez prendre des actions sur ces utilisateurs.
+        </h4>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h4 class="text-xl font-bold mb-4">
+                Liste des utilisateurs
+            </h4>
+            <p class="text-gray-600 mb-6">
                 Il s'agit de la liste des utilisateurs inscrits sur Dealo, vous pouvez prendre des actions sur ces utilisateurs.
             </p>
-            <div class="table-responsive">
+            <div class="w-full">
                 {% if users|length >= 1 %}
-                    <table class="table table-editable table-nowrap align-middle table-edits w-100">
-                        <thead>
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <th>ID</th>
-                                <th>Nom et prénom</th>
-                                <th>Pseudo</th>
-                                <th>Email</th>
-                                <th>Contact</th>
-                                <th>Crée le</th>
-                                <th>Statut du compte</th>
-                                <th>Banni ?</th>
-                                <th>Actions</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    ID
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nom et prénom
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Pseudo
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Email
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Contact
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Crée le
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Statut du compte
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Banni ?
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200">
                             {% for user in users %}
-                                <tr style="
-                                    background-color: {% if 'ROLE_BANNED' in user.roles %}#f8d7da{% elseif 'ROLE_ADMIN' in user.roles %}#efe1ac{% endif %};
-                                ">
-                                    <td>{{ user.id }}</td>
-                                    <td>{{ user.firstName }} {{ user.lastName }}</td>
-                                    <td>{{ user.username }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.phone ? user.phone : 'N/a' }}</td>
-                                    <td> {{ user.createdAt|date('d/m/Y') }}</td>
-                                    <td>
+                                <tr class="{% if 'ROLE_BANNED' in user.roles %}bg-red-100{% elseif 'ROLE_ADMIN' in user.roles %}bg-yellow-100{% endif %}">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        {{ user.id }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        {{ user.firstName }}
+                                        {{ user.lastName }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        {{ user.username }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        {{ user.email }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        {{ user.phone ? user.phone : 'N/a' }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        {{ user.createdAt|date('d/m/Y') }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         {% if 'ROLE_ADMIN' in user.roles %}
                                             Administrateur
                                         {% elseif 'ROLE_USER' in user.roles %}
@@ -81,18 +84,20 @@
                                             Banni
                                         {% endif %}
                                     </td>
-                                    <td>{{ 'ROLE_BANNED' in user.roles ? 'Oui' : 'Non' }}</td>
-                                    <td style="width: 100px;">
-                                        <a class="btn btn-outline-secondary btn-sm" href="mailto:{{ user.email }}" title="Contacter">
-                                            <i class="fas fa-envelope" style="color: green;"></i>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        {{ 'ROLE_BANNED' in user.roles ? 'Oui' : 'Non' }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <a class="text-green-600 hover:text-green-800 mx-1" href="mailto:{{ user.email }}" title="Contacter">
+                                            <i class="fas fa-envelope"></i>
                                         </a>
                                         {% if 'ROLE_BANNED' in user.roles %}
-                                            <a class="btn btn-outline-secondary btn-sm mx-1" href="{{ path('admin_unban_user', { 'id': user.id }) }}" title="Dé-bannir">
-                                                <i class="fas fa-undo" style="color: blue;"></i>
+                                            <a class="text-blue-600 hover:text-blue-800 mx-1" href="{{ path('admin_unban_user', { 'id': user.id }) }}" title="Dé-bannir">
+                                                <i class="fas fa-undo"></i>
                                             </a>
                                         {% else %}
-                                            <a class="btn btn-outline-secondary btn-sm mx-1" href="{{ path('admin_ban_user', { 'id': user.id }) }}" title="Bannir">
-                                                <i class="fas fa-ban" style="color: red;"></i>
+                                            <a class="text-red-600 hover:text-red-800 mx-1" href="{{ path('admin_ban_user', { 'id': user.id }) }}" title="Bannir">
+                                                <i class="fas fa-ban"></i>
                                             </a>
                                         {% endif %}
                                     </td>
@@ -101,10 +106,11 @@
                         </tbody>
                     </table>
                 {% else %}
-                    <div class="text-center fs-3">Aucun utilisateur trouvé</div>
+                    <p class="text-center text-xl text-gray-600">
+                        Aucun utilisateur trouvé
+                    </p>
                 {% endif %}
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

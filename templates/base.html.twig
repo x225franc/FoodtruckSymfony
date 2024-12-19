@@ -1,106 +1,47 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>
-			{% block title %}Welcome!
-			{% endblock %}
-		</title>
+  <head>
+    <meta charset="UTF-8" />
 
-		<!-- Bootstrap CSS -->
-		<link
-		href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-		<!-- Optional theme -->
-		<link
-		href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap-theme.min.css" rel="stylesheet">
-		<!-- Custom CSS -->
-		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
-		<link
-		rel="stylesheet" href="{{ asset('css/icons.min.css') }}">
-		<!-- Boxicons CSS -->
-		<link
-		href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet">
-		<!-- Font Awesome CSS -->
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="{{ asset('css/app.min.css') }}">
-		<link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-		<style>
-			html,
-			body {
-				height: 100%;
-				margin: 0;
-				display: flex;
-				flex-direction: column;
-			}
-			main {
-				flex: 1;
-			}
-			.footer {
-				position: sticky;
-				bottom: 0;
-				width: 100%;
-				padding: 7px;
-				border-top: 1px solid #f1f1f1;
-				background-color: #fcfcfc;
-			}
-		</style>
-	</head>
-	<body>
-		{% set current_route = app.request.get('_route') %}
-		{# header #}
-		{% if current_route == 'home'%}
-			{# or current_route == 'register'#}
-			<header>
-				<nav class="navbar navbar-expand-lg navbar-light bg-light">
-					<a class="navbar-brand" href="{{ path('home') }}">My Website</a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-					<div class="collapse navbar-collapse" id="navbarNav">
-						<ul class="navbar-nav">
-							<li class="nav-item">
-								<a class="nav-link" href="{{ path('home') }}">Home</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="">About</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="">Contact</a>
-							</li>
-						</ul>
-					</div>
-				</nav>
-			</header>
-		{% endif %}
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Tailwind CSS -->
+    <link href="{{ asset('build/app.css') }}" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}" />
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet" />
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('css/app.min.css') }}" />
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
+  </head>
+  <body class="flex flex-col min-h-screen">
+    {% set current_route = app.request.get('_route') %}
+    {% set definedRoutes = ['home' , 'login', 'register', 'about', 'contact' , 'forgotpassword' , 'resetpassword'] %}
 
-		{# main content #}
-		<main>
-			{% block body %}{% endblock %}
-		</main>
+    {# Include header component #}
+    {% if current_route in definedRoutes %}
+        {% include 'components/header.html.twig' %}
+    {% endif %}
 
-		{# footer #}
-		{% if current_route == 'home' or current_route == 'register' %}
-			<footer class="footer mt-auto py-3 bg-light">
-				<div class="container">
-					<span class="text-muted">&copy;
-						{{ "now"|date("Y") }}
-						My Website. All rights reserved.</span>
-				</div>
-			</footer>
-		{% endif %}
+    {% if current_route starts with 'admin' %}
+        <main>
+    {% else %}
+        <main class="flex-grow container mx-auto p-4">
+    {% endif %}
+        {% block body %}{% endblock %}
+    </main>
 
-                <script>
+    {# Include footer component #}
+    {% if current_route in definedRoutes %}
+        {% include 'components/footer.html.twig' %}
+    {% endif %}
+  </body>
+</html>
+
+<script>
         // script permettant d'empecher le renvoie de formulaire 
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }
-    </script>
-
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-		<!-- Include all compiled plugins (below), or include individual files as needed -->
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-		<!-- Custom JS -->
-		<script src="{{ asset('js/app.js') }}"></script>
-	</body>
-</html>
+</script>

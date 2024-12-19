@@ -1,112 +1,108 @@
 {% extends 'base.admin.html.twig' %}
 
-{% block title %}Admin Panel{% endblock %}
-
-{% block admin_body %}
-<style>
-    .admin-category-wrapper {
-        padding: 20px;
-    }
-    .admin-category-title {
-        color: #61c087;
-        margin-bottom: 20px;
-    }
-    .admin-category-subtitle  {
-        color: #757575;
-        line-height: 1.6;
-    }
-    .admin-category-list {
-        margin-top: 20px;
-    }
-    .admin-category-list a {
-        display: block;
-        marginc-bottom: 10px;
-        color: #000;
-        text-decoration: none;
-    }
-    .admin-acategory-list a:hover {
-        color: #61c087;
-    }
-    .admin-category-image {
-        width: 60%;
-        height: auto;
-        margin-top: 20px;
-    }
-    .table-editable input,
-    .table-editable textarea {
-        width: 100%;
-        border: none;
-        background: transparent;
-        resize: none;
-    }
-    .table-editable input:focus,
-    .table-editable textarea:focus {
-        outline: none;
-        background: #f8f9fa;
-    }
-    .table-editable .btn {
-        margin-top: 10px;
-    }
-</style>
-
-<div class="justify-content-center admin-category-wrapper">
-    <h2 class="admin-category-title">Gestion des Catégories</h2>
-    <h4 class="admin-category-subtitle">
-        Vous pouvez ajouter, modifier ou supprimer des catégories.
-    </h4>
-    <div class="rounded-3 shadow-lg" style="min-width: 63vw;">
-        <div class="card-body">
-            <h4 class="card-title">Ajouter une catégorie</h4>
-            <form method="POST" class="mb-3">
-                <div class="mb-3">
-                    <label for="title" class="form-label">Titre</label>
-                    <input type="text" class="form-control" id="title" name="title" required>
-                </div>
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="description" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" name="add_category">Ajouter Catégorie</button>
-            </form>
-
-            <h4 class="card-title">Liste des catégories</h4>
-            <div class="table-responsive">
-                {% if categories|length >= 1 %}
-                    <table class="table table-editable table-nowrap align-middle table-edits w-100">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Titre</th>
-                                <th>Description</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for category in categories %}
-                                <tr>
-                                    <form method="POST">
-                                        <td>{{ category.id }}</td>
-                                        <td>
-                                            <input type="hidden" name="id" value="{{ category.id }}">
-                                            <input type="text" name="title" value="{{ category.title }}" required>
-                                        </td>
-                                        <td>
-                                            <textarea name="description" required>{{ category.description }}</textarea>
-                                        </td>
-                                        <td style="width: 150px;">
-                                            <button type="submit" class="btn btn-warning btn-sm" name="edit_category">Modifier</button>
-                                            <button type="submit" class="btn btn-danger btn-sm" name="delete_category">Supprimer</button>
-                                        </td>
-                                    </form>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% else %}
-                    <div class="text-center fs-3">Aucune catégorie trouvée</div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</div>
+{% block title %}
+    Catégories - Admin
 {% endblock %}
+
+{% block admin_content %}
+    <div class="p-6">
+        <h2 class="text-2xl font-bold text-green-600 mb-6">
+            Gestion des Catégories
+        </h2>
+        <h4 class="text-gray-600 mb-6">
+            Vous pouvez ajouter, modifier ou supprimer des catégories.
+        </h4>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h4 class="text-xl font-bold mb-4">
+                Ajouter une catégorie
+            </h4>
+            <form method="POST" class="mb-6" enctype="multipart/form-data">
+                <div class="mb-4">
+                    <label for="title" class="block text-gray-700 font-bold mb-2">
+                        Titre
+                    </label>
+                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" name="title" placeholder="Titre" required></div>
+                    <div class="mb-4">
+                        <label for="description" class="block text-gray-700 font-bold mb-2">
+                            Description
+                        </label>
+                        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" name="description" placeholder="Description" required></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="image" class="block text-gray-700 font-bold mb-2">Image</label>
+                        <input type="file" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="image" name="image" accept="image/*">
+                    </div>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" name="add_category">
+                        Ajouter Catégorie
+                    </button>
+                </form>
+
+                <h4 class="text-xl font-bold mb-4">
+                    Liste des catégories
+                </h4>
+                <div class="w-full">
+                    {% if categories|length >= 1 %}
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        ID
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Titre
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Description
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Image
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                {% for category in categories %}
+                                    <tr>
+                                        <form method="POST" enctype="multipart/form-data">
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ category.id }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <input type="hidden" name="id" value="{{ category.id }}">
+                                                    <input type="text" name="title" value="{{ category.title }}" required class="w-full bg-transparent focus:outline-none focus:ring-2 focus:ring-green-500 rounded px-2 py-1"></td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        <textarea name="description" required class="w-full bg-transparent focus:outline-none focus:ring-2 focus:ring-green-500 rounded px-2 py-1">
+                                                            {{ category.description }}
+                                                        </textarea>
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        {% if category.image %}
+                                                            <a href="{{ asset('images/' ~ category.image) }}" target="_blank" class="text-green-600 hover:text-green-700">Voir l'image</a>
+                                                        {% else %}
+                                                            <span>Aucune image</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap space-x-2">
+                                                        <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded" name="edit_category">
+                                                            Modifier
+                                                        </button>
+                                                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded" name="delete_category">
+                                                            Supprimer
+                                                        </button>
+                                                    </td>
+                                                </form>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p class="text-center text-xl text-gray-600">
+                                    Aucune catégorie trouvée
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}

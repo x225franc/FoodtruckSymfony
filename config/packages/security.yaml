@@ -16,6 +16,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            user_checker: App\EventListener\UserChecker
             form_login:
                 login_path: login
                 check_path: login
@@ -25,11 +26,19 @@ security:
             logout:
                 path: logout
                 target: home
+    access_denied_url: /access-denied
 
     # Hiérarchie des rôles
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER  
         ROLE_USER: ROLE_BANNED
+
+    access_control:
+        # Deny access to banned users
+        # - { path: ^/banned, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # - { path: ^/, roles: ROLE_USER, allow_if: "not is_granted('ROLE_BANNED')" }
+        # Require ROLE_ADMIN for all URLs starting with /admin
+        - { path: ^/admin, roles: ROLE_ADMIN }
 
 when@test:
     security:

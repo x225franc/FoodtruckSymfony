@@ -3,24 +3,52 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Créer un compte</h1>
+    <div class="container mx-auto max-w-lg p-6 bg-white shadow-md rounded-lg">
+        <h1 class="text-2xl font-bold mb-6">Créer un compte</h1>
 
         {# Afficher le formulaire d'inscription #}
         {{ form_start(registrationForm) }}
-            {{ form_row(registrationForm.username) }}
-            {{ form_row(registrationForm.firstname) }}
-            {{ form_row(registrationForm.lastname) }}
-            {{ form_row(registrationForm.email) }}
-            {{ form_row(registrationForm.phone) }}
-            {{ form_row(registrationForm.password) }}
-            
+            <div class="mb-4">
+                {{ form_label(registrationForm.username, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+                {{ form_widget(registrationForm.username, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                {{ form_errors(registrationForm.username, {'attr': {'class': 'text-red-500 text-xs italic'}}) }}
+            </div>
+            <div class="mb-4">
+                {{ form_label(registrationForm.firstname, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+                {{ form_widget(registrationForm.firstname, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                {{ form_errors(registrationForm.firstname, {'attr': {'class': 'text-red-500 text-xs italic'}}) }}
+            </div>
+            <div class="mb-4">
+                {{ form_label(registrationForm.lastname, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+                {{ form_widget(registrationForm.lastname, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                {{ form_errors(registrationForm.lastname, {'attr': {'class': 'text-red-500 text-xs italic'}}) }}
+            </div>
+            <div class="mb-4">
+                {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+                {{ form_widget(registrationForm.email, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                {{ form_errors(registrationForm.email, {'attr': {'class': 'text-red-500 text-xs italic'}}) }}
+            </div>
+            <div class="mb-4">
+                {{ form_label(registrationForm.phone, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+                {{ form_widget(registrationForm.phone, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                {{ form_errors(registrationForm.phone, {'attr': {'class': 'text-red-500 text-xs italic'}}) }}
+            </div>
+            <div class="mb-4">
+                {{ form_label(registrationForm.password.first, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+                {{ form_widget(registrationForm.password.first, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                {{ form_errors(registrationForm.password.first, {'attr': {'class': 'text-red-500 text-xs italic'}}) }}
+            </div>
+            <div class="mb-4">
+                {{ form_label(registrationForm.password.second, null, {'label_attr': {'class': 'block text-gray-700 font-bold mb-2'}}) }}
+                {{ form_widget(registrationForm.password.second, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                {{ form_errors(registrationForm.password.second, {'attr': {'class': 'text-red-500 text-xs italic'}}) }}
+            </div>
 
-            <button class="btn btn-primary" type="submit">S'inscrire</button>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">S'inscrire</button>
         {{ form_end(registrationForm) }}
 
-        <a class="text-red-600 cursor-pointer transition hover:text-red-700 hover:scale-105" href="{{ path('login') }}">
+        <a class="text-blue-500 hover:text-blue-700 mt-4 inline-block align-baseline font-bold text-sm" href="{{ path('login') }}">
             Vous avez déjà un compte ? Connectez-vous
+        </a>
     </div>
-
 {% endblock %}
