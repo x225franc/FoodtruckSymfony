@@ -1,23 +1,148 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello Controller!{% endblock %}
+{% block title %}
+	Accueil
+{% endblock %}
 
 {% block body %}
+	<div	class="container mx-auto p-4">
 
-	<div class="example-wrapper">
-		<h1>Hello
-			{{ controller_name }}! ✅</h1>
+		{% if categories|length > 0 %}
+			<div	id="category-view">
+				<h1	class="text-2xl font-bold mt-8 mb-4">
+					Veuillez sélectionner une catégorie
+				</h1>
+				<div	class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+					{% for category in categories %}
+						<div	class="bg-white shadow-md rounded-lg p-4 cursor-pointer"	onclick="showCategoryDetails({{ category.id }})">
+							<img	src="{{ asset(category.image is not empty ? 'images/' ~ category.image : 'images/logo_nobg.png') }}"	alt="{{ category.title }}"	class="w-full h-56 object-cover mb-4">
+								<h2	class="text-xl font-bold">
+									{{ category.title }}
+								</h2>
+								<p>
+									{{ category.description }}
+								</p>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+
+				<div	id="details-view"	class="hidden">
+					<button	class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"	onclick="showCategoryView()">
+						<i	class="fa fa-arrow-left">
+							Retour
+						</i>
+					</button>
+					<div	id="details-content"></div>
+				</div>
+			{% else %}
+				<h1	class="text-2xl font-bold mt-8 mb-4">
+					Aucune catégorie n'a été trouvée.
+					Veuillez réessayer plus tard.
+				</h1>
+			{% endif %}
+		</div>
 
 		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-		<h3>Bonjour {{ app.user.username }}</h3>
-			<a class="flex items-center space-x-2 py-1 group hover:border-r-4 hover:border-r-red-600 hover:font-semibold" href="{{ path('logout') }}">
-				<span>Déconnexion</span>
-			</a>
-		{% else %}
-			<a class="flex items-center space-x-2 py-1 group hover:border-r-4 hover:border-r-red-600 hover:font-semibold" href="{{ path('login') }}">
-				<span>Connexion</span>
-			</a>
+			{% include 'components/cart.html.twig' %}
 		{% endif %}
 
-	</div>
-{% endblock %}
+		<script>
+		function showCategoryDetails(categoryId) {
+			// Hide the category view and show the details view
+			document.getElementById('category-view').classList.add('hidden');
+			document.getElementById('details-view').classList.remove('hidden');
+
+			// Fetch the category details via AJAX
+			fetch(`/category-details/${categoryId}`)
+				.then(response => response.text())
+				.then(html => {
+					document.getElementById('details-content').innerHTML = html;
+				});
+		}
+
+		function showCategoryView() {
+			// Hide the details view and show the category view
+			document.getElementById('details-view').classList.add('hidden');
+			document.getElementById('category-view').classList.remove('hidden');
+		}
+
+function addMenuToCart(menuId) {
+    fetch(`/menu-details/${menuId}`)
+        .then(response => response.json())
+        .then(menu => {
+            menu.products.forEach(product => {
+                addProductToCart(product.id, product.title, product.price);
+            });
+        });
+}
+
+function addProductToCart(productId, productTitle, productPrice) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const product = cart.find(item => item.id === productId);
+
+    if (product) {
+        product.quantity += 1;
+    } else {
+        cart.push({ id: productId, title: productTitle, price: productPrice, quantity: 1 });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCart();
+}
+
+function updateCart() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartItems = document.getElementById('cartItems');
+    const totalPrice = document.getElementById('totalPrice');
+    const cartCount = document.getElementById('cartCount');
+
+    cartItems.innerHTML = '';
+    let total = 0;
+    let count = 0;
+
+    if (cart.length === 0) {
+        const emptyMessage = document.createElement('li');
+        emptyMessage.className = 'text-center text-gray-500';
+        emptyMessage.innerText = 'Panier vide';
+        cartItems.appendChild(emptyMessage);
+    } else {
+        cart.forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'flex items-center bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition';
+
+            li.innerHTML = `
+                <div class="ml-4 flex-1">
+                    <h3 class="text-lg font-semibold text-gray-900">${item.title}</h3>
+                    <p class="text-gray-500">Quantité: <span class="font-medium">${item.quantity}</span></p>
+                    <p class="text-gray-700 font-bold">${(item.price * item.quantity).toFixed(2)} €</p>
+                </div>
+                <button class="bg-red-500 text-white rounded-lg px-3 py-1 hover:bg-red-600 transition" onclick="removeFromCart(${item.id})">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M6 6a1 1 0 011-1h6a1 1 0 011 1v10a1 1 0 01-1 1H7a1 1 0 01-1-1V6zm2-2a1 1 0 012 0v1h2V4a1 1 0 112 0v1h1a1 1 0 011 1v1H5V6a1 1 0 011-1h1V4zM5 8h10v8H5V8z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            `;
+
+            cartItems.appendChild(li);
+            total += item.price * item.quantity;
+            count += item.quantity;
+        });
+    }
+
+    totalPrice.innerText = total.toFixed(2);
+    cartCount.innerText = count;
+}
+
+
+function removeFromCart(productId) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart = cart.filter(item => item.id !== productId);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCart();
+}
+
+document.addEventListener('DOMContentLoaded', updateCart);
+	</script>
+	{% endblock %}
+	

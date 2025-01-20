@@ -21,6 +21,10 @@ class Menu
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $description = null;
 
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'menus')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
+
     #[ORM\ManyToMany(targetEntity: Product::class)]
     #[ORM\JoinTable(name: "menu_product",
         joinColumns: [new ORM\JoinColumn(name: "menu_id", referencedColumnName: "id")],
@@ -61,6 +65,18 @@ class Menu
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
         return $this;
     }
 

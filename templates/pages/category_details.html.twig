@@ -1,0 +1,37 @@
+<!-- filepath: /C:/laragon/www/FoodTruckSymfony/templates/pages/category_details.html.twig -->
+<h1 class="text-2xl font-bold mb-4"> Catégorie : {{ category.title }}</h1>
+<p>{{ category.description }}</p>
+
+<h2 class="text-xl font-bold mt-4 mb-2">Menus</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for menu in menus %}
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <img src="{{ asset(menu.image is not empty ? 'images/' ~ menu.image : 'images/logo_nobg.png') }}" alt="{{ menu.name }}" class="w-full h-48 object-cover mb-4">
+            <h3 class="text-lg font-bold">{{ menu.name }}</h3>
+            <p>{{ menu.description }}</p>
+            <h4 class="text-md font-bold mt-4">Produits:</h4>
+            <ul>
+                {% set totalPrice = 0 %}
+                {% for product in menu.products %}
+                    <li>{{ product.title }} - {{ product.price }} €</li>
+                    {% set totalPrice = totalPrice + product.price %}
+                {% endfor %}
+            </ul>
+            <p class="font-bold mt-4">Total: {{ totalPrice }} €</p>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="addMenuToCart({{ menu.id }})">Ajouter au panier</button>
+        </div>
+    {% endfor %}
+</div>
+
+<h2 class="text-xl font-bold mt-4 mb-2">Produits</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for product in products %}
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <img src="{{ asset(product.image is not empty ? 'images/' ~ product.image : 'images/logo_nobg.png') }}" alt="{{ product.title }}" class="w-full h-48 object-cover mb-4">
+            <h3 class="text-lg font-bold">{{ product.title }}</h3>
+            <p>{{ product.description }}</p>
+            <p class="font-bold">{{ product.price }} €</p>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="addProductToCart({{ product.id }}, '{{ product.title }}', {{ product.price }})">Ajouter au panier</button>
+        </div>
+    {% endfor %}
+</div>

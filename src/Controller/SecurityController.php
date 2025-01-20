@@ -125,8 +125,8 @@ class SecurityController extends AbstractController
         // Récupère les erreurs de la dernière tentative de connexion
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        // Récupère le dernier username utilisé pour la connexion
-        $lastUsername = $authenticationUtils->getLastUsername();
+        // Récupère le dernier email utilisé pour la connexion
+        $lastEmail = $authenticationUtils->getLastUsername();
 
         // Ajoute le flash uniquement en cas d'erreur
         if ($error) {
@@ -138,7 +138,7 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('security/login.html.twig', [
-            'last_username' => $lastUsername,
+            'last_email' => $lastEmail,
             'error' => $error,
         ]);
     }

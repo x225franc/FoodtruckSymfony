@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
 
-    <title>{% block title %}{% endblock %}</title>
+    <title>
+      {% block title %}{% endblock %}
+    </title>
     <!-- Tailwind CSS -->
     <link href="{{ asset('build/app.css') }}" rel="stylesheet" />
     <!-- Custom CSS -->
@@ -21,21 +23,21 @@
 
     {# Include header component #}
     {% if current_route in definedRoutes %}
-        {% include 'components/header.html.twig' %}
+      {% include 'components/header.html.twig' %}
     {% endif %}
 
     {% if current_route starts with 'admin' %}
-        <main>
-    {% else %}
+      <main>
+      {% else %}
         <main class="flex-grow container mx-auto p-4">
-    {% endif %}
+        {% endif %}
         {% block body %}{% endblock %}
-    </main>
+      </main>
 
-    {# Include footer component #}
-    {% if current_route in definedRoutes %}
+      {# Include footer component #}
+      {% if current_route in definedRoutes %}
         {% include 'components/footer.html.twig' %}
-    {% endif %}
+      {% endif %}
   </body>
 </html>
 

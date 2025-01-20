@@ -275,7 +275,8 @@ class AdminController extends AbstractController
                 $menu = new Menu();
                 $menu->setName($request->request->get('name'));
                 $menu->setDescription($request->request->get('description'));
-
+                $menu->setCategory($entityManager->getRepository(Category::class)->find($request->request->get('category_id')));
+    
                 $productIds = $request->request->all('products');
                 foreach ($productIds as $productId) {
                     $product = $entityManager->getRepository(Product::class)->find($productId);
@@ -283,12 +284,12 @@ class AdminController extends AbstractController
                         $menu->addProduct($product);
                     }
                 }
-
+    
                 /** @var UploadedFile $imageFile */
                 $imageFile = $request->files->get('image');
                 if ($imageFile && in_array($imageFile->getMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
                     $newFilename = bin2hex(random_bytes(10)) . '.' . $imageFile->guessExtension();
-
+    
                     try {
                         $imageFile->move(
                             $this->getParameter('images_directory'),
@@ -296,10 +297,10 @@ class AdminController extends AbstractController
                         );
                     } catch (FileException $e) {
                     }
-
+    
                     $menu->setImage($newFilename);
                 }
-
+    
                 $entityManager->persist($menu);
                 $entityManager->flush();
                 $this->addFlash('success', 'Menu ajouté avec succès');
@@ -308,7 +309,8 @@ class AdminController extends AbstractController
                 if ($menu) {
                     $menu->setName($request->request->get('name'));
                     $menu->setDescription($request->request->get('description'));
-
+                    $menu->setCategory($entityManager->getRepository(Category::class)->find($request->request->get('category_id')));
+    
                     $menu->getProducts()->clear();
                     $productIds = $request->request->all('products');
                     foreach ($productIds as $productId) {
@@ -317,12 +319,12 @@ class AdminController extends AbstractController
                             $menu->addProduct($product);
                         }
                     }
-
+    
                     /** @var UploadedFile $imageFile */
                     $imageFile = $request->files->get('image');
                     if ($imageFile && in_array($imageFile->getMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
                         $newFilename = bin2hex(random_bytes(10)) . '.' . $imageFile->guessExtension();
-
+    
                         try {
                             $imageFile->move(
                                 $this->getParameter('images_directory'),
@@ -330,10 +332,10 @@ class AdminController extends AbstractController
                             );
                         } catch (FileException $e) {
                         }
-
+    
                         $menu->setImage($newFilename);
                     }
-
+    
                     $entityManager->flush();
                     $this->addFlash('success', 'Menu modifié avec succès');
                 } else {
@@ -348,7 +350,7 @@ class AdminController extends AbstractController
                             unlink($imagePath);
                         }
                     }
-
+    
                     $entityManager->remove($menu);
                     $entityManager->flush();
                     $this->addFlash('success', 'Menu supprimé avec succès');
@@ -357,13 +359,15 @@ class AdminController extends AbstractController
                 }
             }
         }
-
+    
         $menus = $entityManager->getRepository(Menu::class)->findAll();
         $products = $entityManager->getRepository(Product::class)->findAll();
-
+        $categories = $entityManager->getRepository(Category::class)->findAll();
+    
         return $this->render('admin/adminMenu.html.twig', [
             'menus' => $menus,
             'products' => $products,
+            'categories' => $categories,
         ]);
     }
 
