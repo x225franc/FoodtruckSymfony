@@ -7,6 +7,10 @@
 {% block body %}
 	<div	class="container mx-auto p-4">
 
+		<h1	class="text-4xl font-bold mb-4">
+			Bienvenue à la Burgererie !
+		</h1>
+
 		{% if categories|length > 0 %}
 			<div	id="category-view">
 				<h1	class="text-2xl font-bold mt-8 mb-4">
@@ -96,6 +100,7 @@ function updateCart() {
     const cartItems = document.getElementById('cartItems');
     const totalPrice = document.getElementById('totalPrice');
     const cartCount = document.getElementById('cartCount');
+    const checkoutButton = document.getElementById('checkoutButton');
 
     cartItems.innerHTML = '';
     let total = 0;
@@ -106,6 +111,7 @@ function updateCart() {
         emptyMessage.className = 'text-center text-gray-500';
         emptyMessage.innerText = 'Panier vide';
         cartItems.appendChild(emptyMessage);
+        checkoutButton.disabled = true;
     } else {
         cart.forEach(item => {
             const li = document.createElement('li');
@@ -128,6 +134,7 @@ function updateCart() {
             total += item.price * item.quantity;
             count += item.quantity;
         });
+        checkoutButton.disabled = false;
     }
 
     totalPrice.innerText = total.toFixed(2);
@@ -143,6 +150,15 @@ function removeFromCart(productId) {
 }
 
 document.addEventListener('DOMContentLoaded', updateCart);
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('clearCart')) {
+            localStorage.removeItem('cart'); // Supprime le panier
+            urlParams.delete('clearCart'); // Supprime le paramètre de l'URL
+            window.location.replace(window.location.pathname); // Recharge la page proprement
+        }
+    });
+
 	</script>
 	{% endblock %}
-	

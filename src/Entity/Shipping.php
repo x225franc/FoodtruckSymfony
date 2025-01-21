@@ -14,13 +14,10 @@ class Shipping
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $method = null;
+    private ?string $shippingMethod = null;
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
-    private ?float $cost = null;
-
-    #[ORM\Column(type: "datetime", nullable: true)]
-    private ?\DateTime $estimatedDelivery = null;
+    #[ORM\Column(length: 255)]
+    private ?string $withdrawal = null;
 
     #[ORM\OneToOne(targetEntity: Order::class, inversedBy: "shipping")]
     #[ORM\JoinColumn(nullable: false)]
@@ -36,36 +33,25 @@ class Shipping
         return $this->id;
     }
 
-    public function getMethod(): ?string
+    public function getShippingMethod(): ?string
     {
-        return $this->method;
+        return $this->shippingMethod;
     }
 
-    public function setMethod(string $method): self
+    public function setShippingMethod(string $shippingMethod): self
     {
-        $this->method = $method;
+        $this->shippingMethod = $shippingMethod;
         return $this;
     }
 
-    public function getCost(): ?float
+    public function getWithdrawal(): ?string
     {
-        return $this->cost;
+        return $this->withdrawal;
     }
 
-    public function setCost(float $cost): self
+    public function setWithdrawal(?string $withdrawal): self
     {
-        $this->cost = $cost;
-        return $this;
-    }
-
-    public function getEstimatedDelivery(): ?\DateTime
-    {
-        return $this->estimatedDelivery;
-    }
-
-    public function setEstimatedDelivery(?\DateTime $estimatedDelivery): self
-    {
-        $this->estimatedDelivery = $estimatedDelivery;
+        $this->withdrawal = $withdrawal;
         return $this;
     }
 

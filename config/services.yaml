@@ -22,6 +22,10 @@ services:
         tags:
             - { name: 'security.user_checker' }
 
+    App\Security\ProductVoter:
+        tags:
+            - { name: security.voter }
+
     # services pour les autres classes de votre application
     App\:
         resource: '../src/'
@@ -29,4 +33,8 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    # Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface:
+    #     alias: Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher
+    #     public: true
 

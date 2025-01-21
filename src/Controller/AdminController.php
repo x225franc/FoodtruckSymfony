@@ -55,7 +55,45 @@ class AdminController extends AbstractController
             ->from($_ENV['MAIL_USER'])
             ->to($user->getEmail())
             ->subject('Votre compte a été banni')
-            ->html('<p>Votre compte a été banni.</p>');
+            ->html('
+    <div class="row">
+        <div class="col-12">
+            <table class="body-wrap" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: transparent; margin: 0;">
+                <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                    <td style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
+                    <td class="container" width="600" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto;" valign="top">
+                        <div class="content" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">
+                            <table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; margin: 0; border: none;">
+                                <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                    <td class="content-wrap aligncenter" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;padding: 20px; color: #495057; border: 2px solid #1d1e3a;border-radius: 7px; background-color: #fff;" align="center" valign="top">
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                            <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                <td class="content-block" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                                                    <h2 class="aligncenter" style="font-family: \'Helvetica Neue\',Helvetica,Arial,\'Lucida Grande\',sans-serif; box-sizing: border-box; font-size: 24px; color: #000; line-height: 1.2em; font-weight: 400; text-align: center; margin: 40px 0 0;" align="center">Votre compte a été banni</h2>
+                                                </td>
+                                            </tr>
+                                            <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                <td class="content-block aligncenter" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">
+                                                    <p style="font-size: 16px; color: #000;">Nous sommes au regret de vous informer que votre compte a été banni.</p>
+                                                    <p style="font-size: 14px; color: #000;">Si vous pensez qu\'il s\'agit d\'une erreur, veuillez nous contacter.</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                    <td class="content-block" style="text-align: center;font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0;" valign="top">
+                                        © ' . date('Y') . ' Burgererie
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>');
+
 
         $mailer->send($email);
 
@@ -70,12 +108,49 @@ class AdminController extends AbstractController
         $user->setRoles(['ROLE_USER']);
         $entityManager->flush();
 
-        // Send email notification
         $email = (new Email())
             ->from($_ENV['MAIL_USER'])
             ->to($user->getEmail())
             ->subject('Votre compte a été rétabli')
-            ->html('<p>Votre compte a été rétabli.</p>');
+            ->html('
+    <div class="row">
+        <div class="col-12">
+            <table class="body-wrap" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: transparent; margin: 0;">
+                <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                    <td style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
+                    <td class="container" width="600" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto;" valign="top">
+                        <div class="content" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">
+                            <table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; margin: 0; border: none;">
+                                <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                    <td class="content-wrap aligncenter" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;padding: 20px; color: #495057; border: 2px solid #1d1e3a;border-radius: 7px; background-color: #fff;" align="center" valign="top">
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                            <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                <td class="content-block" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                                                    <h2 class="aligncenter" style="font-family: \'Helvetica Neue\',Helvetica,Arial,\'Lucida Grande\',sans-serif; box-sizing: border-box; font-size: 24px; color: #000; line-height: 1.2em; font-weight: 400; text-align: center; margin: 40px 0 0;" align="center">Votre compte a été rétabli</h2>
+                                                </td>
+                                            </tr>
+                                            <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                <td class="content-block aligncenter" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">
+                                                    <p style="font-size: 16px; color: #000;">Bonne nouvelle ! Votre compte a été rétabli et vous pouvez à nouveau accéder à nos services.</p>
+                                                    <p style="font-size: 14px; color: #000;">Si vous avez des questions, n\'hésitez pas à nous contacter.</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                    <td class="content-block" style="text-align: center;font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0;" valign="top">
+                                        © ' . date('Y') . ' Burgererie
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>');
+
 
         $mailer->send($email);
 
@@ -249,6 +324,15 @@ class AdminController extends AbstractController
                             unlink($imagePath);
                         }
                     }
+
+                    // Remove product from all menus
+                    $menus = $entityManager->getRepository(Menu::class)->findAll();
+                    foreach ($menus as $menu) {
+                        if ($menu->getProducts()->contains($product)) {
+                            $menu->removeProduct($product);
+                        }
+                    }
+
                     $entityManager->remove($product);
                     $entityManager->flush();
                     $this->addFlash('success', 'Produit et ses avis associés supprimés avec succès');
@@ -276,7 +360,7 @@ class AdminController extends AbstractController
                 $menu->setName($request->request->get('name'));
                 $menu->setDescription($request->request->get('description'));
                 $menu->setCategory($entityManager->getRepository(Category::class)->find($request->request->get('category_id')));
-    
+
                 $productIds = $request->request->all('products');
                 foreach ($productIds as $productId) {
                     $product = $entityManager->getRepository(Product::class)->find($productId);
@@ -284,12 +368,12 @@ class AdminController extends AbstractController
                         $menu->addProduct($product);
                     }
                 }
-    
+
                 /** @var UploadedFile $imageFile */
                 $imageFile = $request->files->get('image');
                 if ($imageFile && in_array($imageFile->getMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
                     $newFilename = bin2hex(random_bytes(10)) . '.' . $imageFile->guessExtension();
-    
+
                     try {
                         $imageFile->move(
                             $this->getParameter('images_directory'),
@@ -297,10 +381,10 @@ class AdminController extends AbstractController
                         );
                     } catch (FileException $e) {
                     }
-    
+
                     $menu->setImage($newFilename);
                 }
-    
+
                 $entityManager->persist($menu);
                 $entityManager->flush();
                 $this->addFlash('success', 'Menu ajouté avec succès');
@@ -310,7 +394,7 @@ class AdminController extends AbstractController
                     $menu->setName($request->request->get('name'));
                     $menu->setDescription($request->request->get('description'));
                     $menu->setCategory($entityManager->getRepository(Category::class)->find($request->request->get('category_id')));
-    
+
                     $menu->getProducts()->clear();
                     $productIds = $request->request->all('products');
                     foreach ($productIds as $productId) {
@@ -319,12 +403,12 @@ class AdminController extends AbstractController
                             $menu->addProduct($product);
                         }
                     }
-    
+
                     /** @var UploadedFile $imageFile */
                     $imageFile = $request->files->get('image');
                     if ($imageFile && in_array($imageFile->getMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
                         $newFilename = bin2hex(random_bytes(10)) . '.' . $imageFile->guessExtension();
-    
+
                         try {
                             $imageFile->move(
                                 $this->getParameter('images_directory'),
@@ -332,10 +416,10 @@ class AdminController extends AbstractController
                             );
                         } catch (FileException $e) {
                         }
-    
+
                         $menu->setImage($newFilename);
                     }
-    
+
                     $entityManager->flush();
                     $this->addFlash('success', 'Menu modifié avec succès');
                 } else {
@@ -350,7 +434,7 @@ class AdminController extends AbstractController
                             unlink($imagePath);
                         }
                     }
-    
+
                     $entityManager->remove($menu);
                     $entityManager->flush();
                     $this->addFlash('success', 'Menu supprimé avec succès');
@@ -359,11 +443,11 @@ class AdminController extends AbstractController
                 }
             }
         }
-    
+
         $menus = $entityManager->getRepository(Menu::class)->findAll();
         $products = $entityManager->getRepository(Product::class)->findAll();
         $categories = $entityManager->getRepository(Category::class)->findAll();
-    
+
         return $this->render('admin/adminMenu.html.twig', [
             'menus' => $menus,
             'products' => $products,
@@ -383,7 +467,45 @@ class AdminController extends AbstractController
                     ->from($_ENV['MAIL_USER'])
                     ->to($user->getEmail())
                     ->subject('Votre avis a été supprimé')
-                    ->html('<p>Votre avis sur notre site a été supprimé car il ne respecte pas nos conditions d\'utilisation.</p>');
+                    ->html('
+    <div class="row">
+        <div class="col-12">
+            <table class="body-wrap" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: transparent; margin: 0;">
+                <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                    <td style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
+                    <td class="container" width="600" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto;" valign="top">
+                        <div class="content" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">
+                            <table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; margin: 0; border: none;">
+                                <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                    <td class="content-wrap aligncenter" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;padding: 20px; color: #495057; border: 2px solid #1d1e3a;border-radius: 7px; background-color: #fff;" align="center" valign="top">
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                            <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                <td class="content-block" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                                                    <h2 class="aligncenter" style="font-family: \'Helvetica Neue\',Helvetica,Arial,\'Lucida Grande\',sans-serif; box-sizing: border-box; font-size: 24px; color: #000; line-height: 1.2em; font-weight: 400; text-align: center; margin: 40px 0 0;" align="center">Votre avis a été supprimé</h2>
+                                                </td>
+                                            </tr>
+                                            <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                <td class="content-block aligncenter" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">
+                                                    <p style="font-size: 16px; color: #000;">Votre avis sur notre site a été supprimé car il ne respecte pas nos conditions d\'utilisation.</p>
+                                                    <p style="font-size: 14px; color: #000;">Si vous pensez qu\'il s\'agit d\'une erreur, vous pouvez nous contacter pour plus d\'informations.</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                    <td class="content-block" style="text-align: center;font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0;" valign="top">
+                                        © ' . date('Y') . ' Burgererie
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>');
+
 
                 $mailer->send($email);
 

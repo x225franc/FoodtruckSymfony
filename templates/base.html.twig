@@ -19,7 +19,7 @@
   </head>
   <body class="flex flex-col min-h-screen">
     {% set current_route = app.request.get('_route') %}
-    {% set definedRoutes = ['home' , 'login', 'register', 'about', 'contact' , 'forgotpassword' , 'resetpassword'] %}
+    {% set definedRoutes = ['home' , 'login', 'register', 'about', 'contact' , 'forgotpassword' , 'resetpassword' , 'order', 'contact'] %}
 
     {# Include header component #}
     {% if current_route in definedRoutes %}

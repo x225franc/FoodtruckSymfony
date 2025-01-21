@@ -1,9 +1,13 @@
-<!-- filepath: /C:/laragon/www/FoodTruckSymfony/templates/pages/category_details.html.twig -->
 <h1 class="text-2xl font-bold mb-4"> Catégorie : {{ category.title }}</h1>
 <p>{{ category.description }}</p>
 
 <h2 class="text-xl font-bold mt-4 mb-2">Menus</h2>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+{% if menus is empty %}
+    <p class="text-xl">Aucun menu n'a été trouvé. Veuillez réessayer plus tard.</p>
+{% endif %}
+
     {% for menu in menus %}
         <div class="bg-white shadow-md rounded-lg p-4">
             <img src="{{ asset(menu.image is not empty ? 'images/' ~ menu.image : 'images/logo_nobg.png') }}" alt="{{ menu.name }}" class="w-full h-48 object-cover mb-4">
@@ -18,20 +22,33 @@
                 {% endfor %}
             </ul>
             <p class="font-bold mt-4">Total: {{ totalPrice }} €</p>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="addMenuToCart({{ menu.id }})">Ajouter au panier</button>
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="addMenuToCart({{ menu.id }})">Ajouter au panier</button>
+            {% else %}
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="window.location.href='{{ path('login') }}'">Connectez vous</button>
+            {% endif %}
         </div>
     {% endfor %}
 </div>
 
 <h2 class="text-xl font-bold mt-4 mb-2">Produits</h2>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+{% if products is empty %}
+    <p class="text-xl">Aucun produit n'a été trouvé. Veuillez réessayer plus tard.</p>
+{% endif %}
+
     {% for product in products %}
         <div class="bg-white shadow-md rounded-lg p-4">
             <img src="{{ asset(product.image is not empty ? 'images/' ~ product.image : 'images/logo_nobg.png') }}" alt="{{ product.title }}" class="w-full h-48 object-cover mb-4">
             <h3 class="text-lg font-bold">{{ product.title }}</h3>
             <p>{{ product.description }}</p>
             <p class="font-bold">{{ product.price }} €</p>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="addProductToCart({{ product.id }}, '{{ product.title }}', {{ product.price }})">Ajouter au panier</button>
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="addProductToCart({{ product.id }}, '{{ product.title }}', {{ product.price }})">Ajouter au panier</button>
+            {% else %}
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="window.location.href='{{ path('login') }}'">Connectez vous</button>
+            {% endif %}
         </div>
     {% endfor %}
 </div>

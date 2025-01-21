@@ -37,7 +37,7 @@ class Product
     #[ORM\OneToMany(mappedBy: "product", targetEntity: Review::class)]
     private Collection $reviews;
 
-    #[ORM\OneToMany(mappedBy: "product", targetEntity: OrderProduct::class)]
+    #[ORM\OneToMany(mappedBy: "product", targetEntity: OrderProduct::class, cascade: ["remove"])]
     private Collection $orderProducts;
 
     public function __construct()

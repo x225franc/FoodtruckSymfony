@@ -7,7 +7,9 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
+#[ORM\Table(name: "`order`")]
 class Order
 {
     #[ORM\Id]
@@ -44,7 +46,7 @@ class Order
     #[ORM\OneToOne(targetEntity: Shipping::class, mappedBy: "order", cascade: ["persist", "remove"])]
     private ?Shipping $shipping = null;
 
-    #[ORM\OneToMany(mappedBy: "order", targetEntity: OrderProduct::class)]
+    #[ORM\OneToMany(mappedBy: "order", targetEntity: OrderProduct::class, cascade: ["remove"])]
     private Collection $orderProducts;
 
     public function __construct()
@@ -106,6 +108,12 @@ class Order
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
     }
 
     public function getUpdatedAt(): ?\DateTime

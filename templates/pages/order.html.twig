@@ -1,0 +1,139 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation de commande{% endblock %}
+
+{% block body %}
+
+{% if not app.user %}
+    <script>
+        window.location.href = '/';
+    </script>
+{% endif %}
+
+<div class="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">Confirmation de commande</h2>
+    <form action="{{ path('order') }}" method="POST" class="space-y-4">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="nom" class="block text-gray-700 font-medium">Nom</label>
+                <input type="text" id="nom" name="nom" class="w-full border-gray-300 rounded-lg p-2" placeholder="Nom" value="{{ app.user.lastname }}" required>
+            </div>
+            <div>
+                <label for="prenom" class="block text-gray-700 font-medium">Prénom</label>
+                <input type="text" id="prenom" name="prenom" class="w-full border-gray-300 rounded-lg p-2" placeholder="Prénom" value="{{ app.user.firstname }}" required>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="email" class="block text-gray-700 font-medium">Email</label>
+                <input type="email" id="email" name="email" class="w-full border-gray-300 rounded-lg p-2" placeholder="Email" value="{{ app.user.email }}" required>
+            </div>
+            <div>
+                <label for="telephone" class="block text-gray-700 font-medium">Téléphone</label>
+                <input type="tel" id="telephone" name="telephone" class="w-full border-gray-300 rounded-lg p-2" placeholder="0606060606" pattern="[0-9]{10}" value="{{ app.user.phone }}" required>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="paiement" class="block text-gray-700 font-medium">Mode de paiement</label>
+                <select id="paiement" name="paiement" class="w-full border-gray-300 rounded-lg p-2" required>
+                    <option value="paiement_sur_place">Paiement sur place</option>
+                </select>
+            </div>
+            <div>
+                <label for="expedition" class="block text-gray-700 font-medium">Mode d'expédition</label>
+                <select id="expedition" name="expedition" class="w-full border-gray-300 rounded-lg p-2" required>
+                    <option value="retrait_sur_place">Retrait au Food Truck</option>
+                </select>
+            </div>
+        </div>
+
+        <div>
+            <label for="retrait" class="block text-gray-700 font-medium">Période de retrait</label>
+            <select id="retrait" name="retrait" class="w-full border-gray-300 rounded-lg p-2" required>
+                <option value="demain">Demain</option>
+                <option value="demain_plus_un">{{ "now"|date_modify("+1 day")|date("l d F Y") }}</option>
+                <option value="demain_plus_deux">{{ "now"|date_modify("+2 days")|date("l d F Y") }}</option>
+                <option value="demain_plus_trois">{{ "now"|date_modify("+3 days")|date("l d F Y") }}</option>
+            </select>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+        <label for="adresse" class="block text-gray-700 font-medium">Adresse</label>
+        <input type="text" id="adresse" name="adresse" class="w-full border-gray-300 rounded-lg p-2" placeholder="Adresse" required value="{{ address.street ?? '' }}">
+    </div>
+    <div>
+        <label for="ville" class="block text-gray-700 font-medium">Ville</label>
+        <input type="text" id="ville" name="ville" class="w-full border-gray-300 rounded-lg p-2" placeholder="Ville" required value="{{ address.city ?? '' }}">
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+        <label for="département" class="block text-gray-700 font-medium">Département</label>
+        <input type="text" id="departement" name="departement" class="w-full border-gray-300 rounded-lg p-2" placeholder="Département" required value="{{ address.state ?? '' }}">
+    </div>
+    <div>
+        <label for="code_postal" class="block text-gray-700 font-medium">Code postal</label>
+        <input type="text" id="code_postal" name="code_postal" class="w-full border-gray-300 rounded-lg p-2" placeholder="Code Postal" pattern="[0-9]{5}" required value="{{ address.postal_code ?? '' }}">
+    </div>
+</div>
+
+<div>
+    <label for="pays" class="block text-gray-700 font-medium">Pays</label>
+    <input type="text" id="pays" name="pays" class="w-full border-gray-300 rounded-lg p-2 bg-gray-100" value="{{ address.country ?? 'France' }}" disabled>
+</div>
+
+
+        <input type="hidden" name="prix_commande" id="prix_commande">
+        <input type="hidden" name="cart" id="cart">
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-6">Articles dans votre panier</h3>
+        <ul class="border rounded-lg p-4 bg-gray-50 space-y-2" id="cartItems"></ul>
+
+        <div class="mt-4">
+            <h5 class="text-lg font-bold text-gray-900">Total: <span id="totalCommande">0</span> €</h5>
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-4 transition" onclick="">
+            Confirmer la commande
+        </button>
+    </form>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cart.length === 0) {
+            window.location.href = '/';
+            return;
+        }
+
+        const cartItems = document.getElementById('cartItems');
+        const totalCommande = document.getElementById('totalCommande');
+        const prixCommande = document.getElementById('prix_commande');
+        const cartInput = document.getElementById('cart');
+
+        cartItems.innerHTML = '';
+        let total = 0;
+
+        cart.forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item d-flex justify-content-between align-items-center';
+            li.innerHTML = `${item.title} - ${item.quantity} x ${item.price} €`;
+            cartItems.appendChild(li);
+            total += item.price * item.quantity;
+        });
+
+        totalCommande.innerText = total.toFixed(2);
+        prixCommande.value = total.toFixed(2);
+
+        cartInput.value = JSON.stringify(cart);
+    });
+</script>
+{% endblock %}

@@ -13,28 +13,18 @@
                             </li>
                         {% endif %}
                         <li class="px-4 py-2">
-                            <a class="hover:text-gray-400" href="#">
+                            <a class="hover:text-gray-400" href="{{ path('home') }}">
                                 Menu
                             </a>
                         </li>
                         <li class="px-4 py-2">
-                            <a class="hover:text-gray-400" href="#">
-                                A propos
-                            </a>
-                        </li>
-                        <li class="px-4 py-2">
-                            <a class="hover:text-gray-400" href="#">
+                            <a class="hover:text-gray-400" href="{{ path('contact') }}">
                                 Contact
                             </a>
                         </li>
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             <li class="px-4 py-2">
-                                <a class="hover:text-gray-400" href="">
-                                    Profil
-                                </a>
-                            </li>
-                            <li class="px-4 py-2">
-                                <a class="hover:text-gray-400" href="{{ path('logout') }}">
+                                <a class="hover:text-gray-400" href="{{ path('logout') }}" onclick="clearCartBeforeLogout()">
                                     Déconnexion
                                 </a>
                             </li>
@@ -50,3 +40,8 @@
             </div>
         </header>
         
+        <script>
+            function clearCartBeforeLogout() {
+                localStorage.removeItem('cart'); // Supprime le panier du localStorage
+            }
+        </script

@@ -25,7 +25,7 @@ class Menu
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\ManyToMany(targetEntity: Product::class)]
+    #[ORM\ManyToMany(targetEntity: Product::class, cascade: ["remove"])]
     #[ORM\JoinTable(name: "menu_product",
         joinColumns: [new ORM\JoinColumn(name: "menu_id", referencedColumnName: "id")],
         inverseJoinColumns: [new ORM\JoinColumn(name: "product_id", referencedColumnName: "id")]
