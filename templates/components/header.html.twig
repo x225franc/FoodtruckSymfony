@@ -17,11 +17,13 @@
                                 Menu
                             </a>
                         </li>
+                        {% if not is_granted('ROLE_ADMIN') %}
                         <li class="px-4 py-2">
                             <a class="hover:text-gray-400" href="{{ path('contact') }}">
                                 Contact
                             </a>
                         </li>
+                        {% endif %}
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             <li class="px-4 py-2">
                                 <a class="hover:text-gray-400" href="{{ path('logout') }}" onclick="clearCartBeforeLogout()">

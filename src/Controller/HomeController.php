@@ -9,6 +9,8 @@ use App\Entity\Address;
 use App\Entity\Order;
 use App\Entity\OrderProduct;
 use App\Entity\Shipping;
+use App\Entity\User;
+use App\Entity\ContactMessage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use App\Repository\UserRepository;
 
 class HomeController extends AbstractController
 {
@@ -43,8 +46,76 @@ class HomeController extends AbstractController
     }
 
     #[Route('/contact', name: 'contact')]
-    public function contact(): Response
+    public function contact(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer, UserRepository $userRepository): Response
     {
+        if ($request->isMethod('POST')) {
+            $email = $request->request->get('email');
+            $subject = $request->request->get('subject');
+            $message = $request->request->get('message');
+
+            // Store the message in the contact_message table
+            $contactMessage = new ContactMessage();
+            $contactMessage->setEmail($email);
+            $contactMessage->setSubject($subject);
+            $contactMessage->setMessage($message);
+            $contactMessage->setCreatedAt(new \DateTimeImmutable());
+            $entityManager->persist($contactMessage);
+            $entityManager->flush();
+
+           // Récupérer tous les admins
+$adminUsers = $userRepository->findByRole('ROLE_ADMIN');
+
+foreach ($adminUsers as $admin) {
+    $emailBody = '
+    <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+        <table style="width: 100%; max-width: 600px; margin: auto; background: white; border-radius: 8px; padding: 20px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+            <tr>
+                <td style="text-align: center;">
+                    <h2 style="color: #333;">Nouvelle notification</h2>
+                    <p style="color: #666; font-size: 14px;">Un utilisateur a envoyé un message :</p>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 10px 0;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="background: #f8f8f8; padding: 10px; font-weight: bold;">Email</td>
+                            <td style="background: #fff; padding: 10px;">' . htmlspecialchars($email) . '</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #f8f8f8; padding: 10px; font-weight: bold;">Sujet</td>
+                            <td style="background: #fff; padding: 10px;">' . htmlspecialchars($subject) . '</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #f8f8f8; padding: 10px; font-weight: bold;">Message</td>
+                            <td style="background: #fff; padding: 10px;">' . nl2br(htmlspecialchars($message)) . '</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; padding: 20px; color: #888; font-size: 12px;">
+                    © ' . date('Y') . ' Burgererie - Tous droits réservés.
+                </td>
+            </tr>
+        </table>
+    </div>';
+
+    // Création et envoi de l'email
+    $email = (new Email())
+        ->from($email)
+        ->to($admin->getEmail())
+        ->subject("Nouveau message reçu - " . $subject)
+        ->html($emailBody);
+
+    $mailer->send($email);
+}
+
+
+            $this->addFlash('success', 'Votre message a été envoyé avec succès.');
+            return $this->redirectToRoute('home');
+        }
+
         return $this->render('pages/contact.html.twig', []);
     }
 
