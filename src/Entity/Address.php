@@ -16,7 +16,7 @@ class Address
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'addresses')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]
@@ -37,7 +37,7 @@ class Address
     #[ORM\Column(type: "datetime_immutable")]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\OneToMany(mappedBy: "address", targetEntity: Order::class)]
+    #[ORM\OneToMany(mappedBy: "address", targetEntity: Order::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $orders;
 
     public function __construct()

@@ -7,7 +7,6 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: "`order`")]
 class Order
@@ -36,17 +35,17 @@ class Order
     private ?\DateTime $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "orders")]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: Address::class, inversedBy: "orders")]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Address $address = null;
 
     #[ORM\OneToOne(targetEntity: Shipping::class, mappedBy: "order", cascade: ["persist", "remove"])]
     private ?Shipping $shipping = null;
 
-    #[ORM\OneToMany(mappedBy: "order", targetEntity: OrderProduct::class, cascade: ["remove"])]
+    #[ORM\OneToMany(mappedBy: "order", targetEntity: OrderProduct::class, cascade: ["remove"], orphanRemoval: true)]
     private Collection $orderProducts;
 
     public function __construct()

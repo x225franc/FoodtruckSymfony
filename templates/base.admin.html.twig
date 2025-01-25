@@ -1,79 +1,88 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin Panel{% endblock %}
+{% block title %}
+    Admin Panel
+{% endblock %}
 
 {% block body %}
-<div class="flex min-h-screen bg-gray-100">
-    <!-- Sidebar -->
-    <div class="w-12 bg-gray-800 text-white flex flex-col">
-        <div class="flex items-center justify-center h-16">
-            <a href="/admin">
-                <img src="{{ asset('images/logo_nobg.png') }}" alt="Burgererie" class="h-12">
-            </a>
+    <div class="flex min-h-screen bg-gray-100">
+        <!-- Sidebar -->
+        <div class="w-12 bg-gray-800 text-white flex flex-col">
+            <div class="flex items-center justify-center h-16">
+                <a href="/admin">
+                    <img src="{{ asset('images/logo_nobg.png') }}" alt="Burgererie" class="h-12"></a>
+                </div>
+                <div class="flex flex-col items-center flex-1">
+                    <ul class="flex flex-col items-center w-full">
+
+                        <li>
+                            <a href="/admin/user" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des comptes">
+                                <i class="fas fa-user-circle"></i>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/admin/category" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des catégories">
+                                <i class="fas fa-list"></i>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/admin/product" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des produits">
+                                <i class="fas fa-utensils"></i>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/admin/menu" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des menus">
+                                <i class="fas fa-concierge-bell"></i>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/admin/contact" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Demandes de contact">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/admin/order" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Gestion des commandes">
+                                <i class="fas fa-shopping-cart"></i>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/admin/review" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des évaluations">
+                                <i class="fas fa-star"></i>
+                            </a>
+                        </li>
+
+                        {# <li>
+                            <a href="#" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="#">
+                            <i class="fas fa-info"></i>
+                            </a>
+                        </li> #}
+
+                        <li class="mt-auto">
+                            <a href="/" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Retourner à l'accueil">
+                                <i class="fas fa-home"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-1">
+                {% block admin_content %}{% endblock %}
+            </div>
         </div>
-        <div class="flex flex-col items-center flex-1">
-            <ul class="flex flex-col items-center w-full">
-                <li>
-                    <a href="/admin/user" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des comptes">
-                        <i class="fas fa-user-circle"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/category" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des catégories">
-                        <i class="fas fa-list"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/product" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des produits">
-                        <i class="fas fa-utensils"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/menu" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des menus">
-                        <i class="fas fa-concierge-bell"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/review" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Modération des évaluations">
-                        <i class="fas fa-star"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/contact" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Demandes de contact">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-                </li>
 
-                <li>
-                    <a href="#" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="#">
-                        <i class="fas fa-info"></i>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="#" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="#">
-                        <i class="fas fa-info"></i>
-                    </a>
-                </li>
-
-
-                <li class="mt-auto">
-                    <a href="/" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Retourner à l'accueil">
-                        <i class="fas fa-home"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="flex-1">
-        {% block admin_content %}{% endblock %}
-    </div>
-</div>
-
-<!-- Footer -->
-<footer class="bg-gray-800 text-white p-4 text-center">
-    &copy; {{ "now"|date("Y") }} Burgererie. Tous droits réservés.
-</footer>
-{% endblock %}
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white p-4 text-center">
+            &copy;
+            {{ "now"|date("Y") }}
+            Burgererie. Tous droits réservés.
+        </footer>
+    {% endblock %}
+    

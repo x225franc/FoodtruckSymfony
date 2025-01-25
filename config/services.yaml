@@ -38,3 +38,14 @@ services:
     #     alias: Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher
     #     public: true
 
+    App\Twig\AppExtension:
+        arguments:
+            $security: '@security.helper'
+            $orderProductRepository: '@App\Repository\OrderProductRepository'
+            $reviewRepository: '@App\Repository\ReviewRepository'
+        tags: ['twig.extension']
+
+    App\Service\PicsumService:
+        arguments:
+            $httpClient: '@http_client'
+

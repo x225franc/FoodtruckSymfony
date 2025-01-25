@@ -5,9 +5,11 @@
 {% block body %}
 
 {% if not app.user %}
-    <script>
-        window.location.href = '/';
-    </script>
+    {% block javascripts %}
+        <script>
+            window.location.href = '/';
+        </script>
+    {% endblock %}
 {% endif %}
 
 <div class="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
@@ -105,35 +107,36 @@
     </form>
 </div>
 
+    {% block javascripts %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                if (cart.length === 0) {
+                    window.location.href = '/';
+                    return;
+                }
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        if (cart.length === 0) {
-            window.location.href = '/';
-            return;
-        }
+                const cartItems = document.getElementById('cartItems');
+                const totalCommande = document.getElementById('totalCommande');
+                const prixCommande = document.getElementById('prix_commande');
+                const cartInput = document.getElementById('cart');
 
-        const cartItems = document.getElementById('cartItems');
-        const totalCommande = document.getElementById('totalCommande');
-        const prixCommande = document.getElementById('prix_commande');
-        const cartInput = document.getElementById('cart');
+                cartItems.innerHTML = '';
+                let total = 0;
 
-        cartItems.innerHTML = '';
-        let total = 0;
+                cart.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    li.innerHTML = `${item.title} - ${item.quantity} x ${item.price} €`;
+                    cartItems.appendChild(li);
+                    total += item.price * item.quantity;
+                });
 
-        cart.forEach(item => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item d-flex justify-content-between align-items-center';
-            li.innerHTML = `${item.title} - ${item.quantity} x ${item.price} €`;
-            cartItems.appendChild(li);
-            total += item.price * item.quantity;
-        });
+                totalCommande.innerText = total.toFixed(2);
+                prixCommande.value = total.toFixed(2);
 
-        totalCommande.innerText = total.toFixed(2);
-        prixCommande.value = total.toFixed(2);
-
-        cartInput.value = JSON.stringify(cart);
-    });
+                cartInput.value = JSON.stringify(cart);
+            });
 </script>
+    {% endblock %}
 {% endblock %}

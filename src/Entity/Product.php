@@ -28,16 +28,16 @@ class Product
     private ?string $image = null;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Category $category = null;
 
     #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: "products")]
     private Collection $menus;
 
-    #[ORM\OneToMany(mappedBy: "product", targetEntity: Review::class)]
+    #[ORM\OneToMany(mappedBy: "product", targetEntity: Review::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $reviews;
 
-    #[ORM\OneToMany(mappedBy: "product", targetEntity: OrderProduct::class, cascade: ["remove"])]
+    #[ORM\OneToMany(mappedBy: "product", targetEntity: OrderProduct::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $orderProducts;
 
     public function __construct()

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Menu;
 use App\Entity\User;
+use App\Entity\Order;
 use App\Entity\Review;
 use App\Entity\Product;
 use App\Entity\Category;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -531,5 +533,85 @@ class AdminController extends AbstractController
         return $this->render('admin/adminContact.html.twig', [
             'contacts' => $contacts,
         ]);
+    }
+
+    #[Route('/admin/order', name: 'admin_order')]
+    public function order(EntityManagerInterface $entityManager): Response
+    {
+        $orders = $entityManager->getRepository(Order::class)->findAll();
+
+        return $this->render('admin/adminOrder.html.twig', [
+            'orders' => $orders,
+        ]);
+    }
+
+    #[Route('/admin/order/update/{id}', name: 'admin_order_update', methods: ['POST'])]
+    public function updateOrderStatus(Order $order, EntityManagerInterface $entityManager, MailerInterface $mailer): RedirectResponse
+    {
+        $order->setStatus('finished');
+        $order->setUpdatedAt(new \DateTime());
+        $entityManager->flush();
+
+        // Send email to the user
+        $user = $order->getUser();
+        $email = (new Email())
+            ->from($_ENV['MAIL_USER'])
+            ->to($user->getEmail())
+            ->subject('Votre commande ' . $order->getOrderNumber() . ' est terminée')
+            ->html('
+                <div class="row">
+                    <div class="col-12">
+                        <table class="body-wrap" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: transparent; margin: 0;">
+                            <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                <td style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
+                                <td class="container" width="600" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto;" valign="top">
+                                    <div class="content" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">
+                                        <table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; margin: 0; border: none;">
+                                            <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                <td class="content-wrap aligncenter" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;padding: 20px; color: #495057; border: 2px solid #1d1e3a;border-radius: 7px; background-color: #fff;" align="center" valign="top">
+                                                    <table width="100%" cellpadding="0" cellspacing="0" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                        <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                            <td class="content-block" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                                                                <h2 class="aligncenter" style="font-family: \'Helvetica Neue\',Helvetica,Arial,\'Lucida Grande\',sans-serif; box-sizing: border-box; font-size: 24px; color: #000; line-height: 1.2em; font-weight: 400; text-align: center; margin: 40px 0 0;" align="center">Votre commande est terminée</h2>
+                                                            </td>
+                                                        </tr>
+                                                        <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                            <td class="content-block aligncenter" style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">
+                                                                <p style="font-size: 16px; color: #000;">Bonne nouvelle ! Votre commande est terminée et vous pouvez maintenant laisser un avis sur les produits que vous avez commandés.</p>
+                                                                <p style="font-size: 14px; color: #000;">Si vous avez des questions, n\'hésitez pas à nous contacter.</p>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr style="font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                                <td class="content-block" style="text-align: center;font-family: \'Helvetica Neue\',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0;" valign="top">
+                                                    © ' . date('Y') . ' Burgererie
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>');
+
+        $mailer->send($email);
+
+        $this->addFlash('success', 'Commande terminée et utilisateur notifié , il peut maintenant laisser un avis sur les produits commandés.');
+
+        return $this->redirectToRoute('admin_order');
+    }
+
+    #[Route('/admin/contact/delete/{id}', name: 'admin_contact_delete', methods: ['POST'])]
+    public function deleteContact(ContactMessage $contactMessage, EntityManagerInterface $entityManager): RedirectResponse
+    {
+        $entityManager->remove($contactMessage);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Message supprimé avec succès.');
+
+        return $this->redirectToRoute('admin_contact');
     }
 }

@@ -1,40 +1,40 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Contactez nous !{% endblock %}
-
-{% block body %}
-{% if is_granted('ROLE_ADMIN') %}
-    {% set redirect_url = path('home') %}
-    <script>
-        window.location.href = "{{ redirect_url }}";
-    </script>
-{% else %}
-<div class="mx-64 mt-10 p-6 bg-white rounded-lg shadow-md">
-    <h2 class="text-2xl font-bold text-center mb-6">Contactez nous !</h2>
-    <form action="{{ path('contact') }}" method="POST" class="space-y-4">
-        <div class="flex flex-col">
-            <label for="email" class="mb-2 text-sm font-medium text-gray-700">Votre Email</label>
-            <input type="email" id="email" name="email" class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Votre Email" value="{{ app.user ? app.user.email : '' }}" required {{ app.user ? 'readonly' : '' }}>
-        </div>
-        <div class="flex flex-col">
-            <label for="subject" class="mb-2 text-sm font-medium text-gray-700">Sujet</label>
-            <input type="text" id="subject" name="subject" class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Sujet" required>
-        </div>
-        <div class="flex flex-col">
-            <label for="message" class="mb-2 text-sm font-medium text-gray-700">Message</label>
-            <textarea id="message" name="message" class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Votre message" rows="6" required></textarea>
-        </div>
-        <button type="submit" class="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            Envoyer
-        </button>
-    </form>
-</div>
-{% endif %}
-
-    <script>
-        // script permettant d'empecher le renvoie de formulaire
-        if (window.history.replaceState) {
-            window.history.replaceState(null, null, window.location.href);
-        }
-    </script>
+{% block title %}
+    Contactez nous !
 {% endblock %}
+{% block body %}
+    {% if is_granted('ROLE_ADMIN') %}
+        {% set redirect_url = path('home') %}
+        <script>
+        window.location.href = "{{ home }}";
+    </script>
+    {% else %}
+        <div class="mx-64 mt-10 p-6 bg-white rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-center mb-6">
+                Contactez nous !
+            </h2>
+            <form action="{{ path('contact') }}" method="POST" class="space-y-4">
+                <div class="flex flex-col">
+                    <label for="email" class="mb-2 text-sm font-medium text-gray-700">
+                        Votre Email
+                    </label>
+                    <input type="email" id="email" name="email" class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Votre Email" value="{{ app.user ? app.user.email : '' }}" required {{ app.user ? 'readonly' : '' }}></div>
+                    <div class="flex flex-col">
+                        <label for="subject" class="mb-2 text-sm font-medium text-gray-700">
+                            Sujet
+                        </label>
+                        <input type="text" id="subject" name="subject" class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Sujet" required></div>
+                        <div class="flex flex-col">
+                            <label for="message" class="mb-2 text-sm font-medium text-gray-700">
+                                Message
+                            </label>
+                            <textarea id="message" name="message" class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Votre message" rows="6" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            Envoyer
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+        {% endblock %}
+        

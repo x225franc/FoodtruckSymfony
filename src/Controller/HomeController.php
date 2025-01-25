@@ -11,6 +11,7 @@ use App\Entity\OrderProduct;
 use App\Entity\Shipping;
 use App\Entity\User;
 use App\Entity\ContactMessage;
+use App\Entity\Review;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
+use App\Repository\OrderProductRepository;
+use App\Repository\ReviewRepository;
 
 class HomeController extends AbstractController
 {
@@ -32,16 +35,20 @@ class HomeController extends AbstractController
     }
 
     #[Route('/', name: 'home')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, OrderProductRepository $orderProductRepository, ReviewRepository $reviewRepository): Response
     {
         $categories = $entityManager->getRepository(Category::class)->findAll();
         $menus = $entityManager->getRepository(Menu::class)->findAll();
         $products = $entityManager->getRepository(Product::class)->findAll();
 
+        $user = $this->getUser();
+        $reviewableItemsCount = $user ? $this->getReviewableItemsCount($user, $orderProductRepository, $reviewRepository) : 0;
+
         return $this->render('pages/index.html.twig', [
             'categories' => $categories,
             'menus' => $menus,
             'products' => $products,
+            'reviewableItemsCount' => $reviewableItemsCount,
         ]);
     }
 
@@ -62,11 +69,11 @@ class HomeController extends AbstractController
             $entityManager->persist($contactMessage);
             $entityManager->flush();
 
-           // Récupérer tous les admins
-$adminUsers = $userRepository->findByRole('ROLE_ADMIN');
+            // Récupérer tous les admins
+            $adminUsers = $userRepository->findByRole('ROLE_ADMIN');
 
-foreach ($adminUsers as $admin) {
-    $emailBody = '
+            foreach ($adminUsers as $admin) {
+                $emailBody = '
     <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
         <table style="width: 100%; max-width: 600px; margin: auto; background: white; border-radius: 8px; padding: 20px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
             <tr>
@@ -101,15 +108,15 @@ foreach ($adminUsers as $admin) {
         </table>
     </div>';
 
-    // Création et envoi de l'email
-    $email = (new Email())
-        ->from($email)
-        ->to($admin->getEmail())
-        ->subject("Nouveau message reçu - " . $subject)
-        ->html($emailBody);
+                // Création et envoi de l'email
+                $email = (new Email())
+                    ->from($email)
+                    ->to($admin->getEmail())
+                    ->subject("Nouveau message reçu - " . $subject)
+                    ->html($emailBody);
 
-    $mailer->send($email);
-}
+                $mailer->send($email);
+            }
 
 
             $this->addFlash('success', 'Votre message a été envoyé avec succès.');
@@ -158,6 +165,88 @@ foreach ($adminUsers as $admin) {
         return $this->json($menuData);
     }
 
+    public function getReviewableItemsCount(User $user, OrderProductRepository $orderProductRepository, ReviewRepository $reviewRepository): int
+    {
+        $finishedOrders = $user->getOrders()->filter(function (Order $order) {
+            return $order->getStatus() === 'finished';
+        });
+
+        $reviewableItemsCount = 0;
+
+        foreach ($finishedOrders as $order) {
+            foreach ($order->getOrderProducts() as $orderProduct) {
+                $product = $orderProduct->getProduct();
+                $existingReview = $reviewRepository->findOneBy(['product' => $product, 'user' => $user]);
+
+                if (!$existingReview) {
+                    $reviewableItemsCount++;
+                }
+            }
+        }
+
+        return $reviewableItemsCount;
+    }
+
+    #[Route('/review', name: 'review')]
+    public function review(Request $request, EntityManagerInterface $entityManager, OrderProductRepository $orderProductRepository, ReviewRepository $reviewRepository): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        if ($request->isMethod('POST')) {
+            $productIds = $request->request->all('product_id');
+            $ratings = $request->request->all('rating');
+            $comments = $request->request->all('comment');
+
+            foreach ($productIds as $index => $productId) {
+                $product = $entityManager->getRepository(Product::class)->find($productId);
+                $existingReview = $reviewRepository->findOneBy(['product' => $product, 'user' => $user]);
+
+                if ($product && !$existingReview) {
+                    $review = new Review();
+                    $review->setProduct($product);
+                    $review->setUser($user);
+                    $review->setRating($ratings[$index]);
+                    $review->setComment($comments[$index]);
+                    $entityManager->persist($review);
+                }
+            }
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Vos avis ont été enregistrés.');
+            return $this->redirectToRoute('home');
+        }
+
+        $finishedOrders = $user->getOrders()->filter(function (Order $order) {
+            return $order->getStatus() === 'finished';
+        });
+
+        $reviewableItems = [];
+
+        foreach ($finishedOrders as $order) {
+            foreach ($order->getOrderProducts() as $orderProduct) {
+                $product = $orderProduct->getProduct();
+                $existingReview = $reviewRepository->findOneBy(['product' => $product, 'user' => $user]);
+
+                if (!$existingReview) {
+                    $reviewableItems[] = [
+                        'product' => $product,
+                        'orderProduct' => $orderProduct,
+                    ];
+                }
+            }
+        }
+
+        return $this->render('pages/review.html.twig', [
+            'reviewableItems' => $reviewableItems,
+        ]);
+    }
+
     #[Route('/order', name: 'order')]
     public function order(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
     {
@@ -197,7 +286,7 @@ foreach ($adminUsers as $admin) {
             // dump($cartItems); exit;
 
             // Numéro unique de commande
-            $numero_de_commande = uniqid("N°-");
+            $numero_de_commande = uniqid("N°");
 
             // Créer ou mettre à jour l'adresse de l'utilisateur
             if (!$address) {

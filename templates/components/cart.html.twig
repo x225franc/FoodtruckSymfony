@@ -33,40 +33,43 @@
         0
     </span>
 </button>
-<script>
-function toggleCart() {
-    const overlay = document.getElementById('cartOffcanvas');
-    const panel = document.getElementById('cartPanel');
-    const cartButton = document.getElementById('cartButton');
 
-    if (overlay.classList.contains('hidden')) {
-        overlay.classList.remove('hidden');
-        setTimeout(() => panel.classList.remove('translate-x-full'), 10);
-        cartButton.classList.add('hidden'); // Masque le bouton "Voir le panier"
-    } else {
-        panel.classList.add('translate-x-full');
-        setTimeout(() => {
-            overlay.classList.add('hidden');
-            cartButton.classList.remove('hidden'); // Réaffiche le bouton "Voir le panier"
-        }, 300);
-    }
-}
+{% block javascripts %}
+    <script>
+        function toggleCart() {
+            const overlay = document.getElementById('cartOffcanvas');
+            const panel = document.getElementById('cartPanel');
+            const cartButton = document.getElementById('cartButton');
 
-// Ferme le panier en cliquant en dehors
-document.getElementById('cartOffcanvas').addEventListener('click', function(event) {
-    if (event.target === this) toggleCart();
-});
+            if (overlay.classList.contains('hidden')) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => panel.classList.remove('translate-x-full'), 10);
+                cartButton.classList.add('hidden'); // Masque le bouton "Voir le panier"
+            } else {
+                panel.classList.add('translate-x-full');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    cartButton.classList.remove('hidden'); // Réaffiche le bouton "Voir le panier"
+                }, 300);
+            }
+        }
 
-function updateCart() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const checkoutButton = document.getElementById('checkoutButton');
+        // Ferme le panier en cliquant en dehors
+        document.getElementById('cartOffcanvas').addEventListener('click', function(event) {
+            if (event.target === this) toggleCart();
+        });
 
-    if (cart.length === 0) {
-        checkoutButton.disabled = true;
-    } else {
-        checkoutButton.disabled = false;
-    }
-}
+        function updateCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const checkoutButton = document.getElementById('checkoutButton');
 
-document.addEventListener('DOMContentLoaded', updateCart);
-</script>
+            if (cart.length === 0) {
+                checkoutButton.disabled = true;
+            } else {
+                checkoutButton.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', updateCart);
+        </script>
+{% endblock %}

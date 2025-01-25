@@ -1,54 +1,80 @@
-<h1 class="text-2xl font-bold mb-4"> Catégorie : {{ category.title }}</h1>
-<p>{{ category.description }}</p>
+{% extends 'base.html.twig' %}
 
-<h2 class="text-xl font-bold mt-4 mb-2">Menus</h2>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+{% block title %}
+    Catégorie : {{ category.title }}
+{% endblock %}
 
-{% if menus is empty %}
-    <p class="text-xl">Aucun menu n'a été trouvé. Veuillez réessayer plus tard.</p>
-{% endif %}
+{% block body %}
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Catégorie : {{ category.title }}</h1>
+        <p>{{ category.description }}</p>
 
-    {% for menu in menus %}
-        <div class="bg-white shadow-md rounded-lg p-4">
-            <img src="{{ asset(menu.image is not empty ? 'images/' ~ menu.image : 'images/logo_nobg.png') }}" alt="{{ menu.name }}" class="w-full h-48 object-cover mb-4">
-            <h3 class="text-lg font-bold">{{ menu.name }}</h3>
-            <p>{{ menu.description }}</p>
-            <h4 class="text-md font-bold mt-4">Produits:</h4>
-            <ul>
-                {% set totalPrice = 0 %}
-                {% for product in menu.products %}
-                    <li>{{ product.title }} - {{ product.price }} €</li>
-                    {% set totalPrice = totalPrice + product.price %}
-                {% endfor %}
-            </ul>
-            <p class="font-bold mt-4">Total: {{ totalPrice }} €</p>
-                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="addMenuToCart({{ menu.id }})">Ajouter au panier</button>
-            {% else %}
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="window.location.href='{{ path('login') }}'">Connectez vous</button>
+        <h2 class="text-xl font-bold mt-4 mb-2">Menus</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% if menus is empty %}
+                <p class="text-xl">Aucun menu n'a été trouvé. Veuillez réessayer plus tard.</p>
             {% endif %}
+            {% for menu in menus %}
+                <div class="bg-white shadow-md rounded-lg p-4">
+                    <img src="{{ menu.image is not empty ? (menu.image starts with 'https://' ? menu.image : 'images/' ~ menu.image) : 'images/logo_nobg.png' }}" alt="{{ menu.name }}" class="w-full h-48 object-cover mb-4">
+                    <h3 class="text-lg font-bold">{{ menu.name }}</h3>
+                    <p>{{ menu.description }}</p>
+                    <h4 class="text-md font-bold mt-4">Produits:</h4>
+                    <ul>
+                        {% set totalPrice = 0 %}
+                        {% for product in menu.products %}
+                            <li>{{ product.title }} - {{ product.price }} €</li>
+                            {% set totalPrice = totalPrice + product.price %}
+                        {% endfor %}
+                    </ul>
+                    <p class="font-bold mt-4">Total: {{ totalPrice }} €</p>
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="addMenuToCart({{ menu.id }})">Ajouter au panier</button>
+                    {% else %}
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="window.location.href='{{ path('login') }}'">Connectez vous</button>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-</div>
 
-<h2 class="text-xl font-bold mt-4 mb-2">Produits</h2>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-{% if products is empty %}
-    <p class="text-xl">Aucun produit n'a été trouvé. Veuillez réessayer plus tard.</p>
-{% endif %}
-
-    {% for product in products %}
-        <div class="bg-white shadow-md rounded-lg p-4">
-            <img src="{{ asset(product.image is not empty ? 'images/' ~ product.image : 'images/logo_nobg.png') }}" alt="{{ product.title }}" class="w-full h-48 object-cover mb-4">
-            <h3 class="text-lg font-bold">{{ product.title }}</h3>
-            <p>{{ product.description }}</p>
-            <p class="font-bold">{{ product.price }} €</p>
-                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="addProductToCart({{ product.id }}, '{{ product.title }}', {{ product.price }})">Ajouter au panier</button>
-            {% else %}
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="window.location.href='{{ path('login') }}'">Connectez vous</button>
+        <h2 class="text-xl font-bold mt-4 mb-2">Produits</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% if products is empty %}
+                <p class="text-xl">Aucun produit n'a été trouvé. Veuillez réessayer plus tard.</p>
             {% endif %}
+            {% for product in products %}
+                <div class="bg-white shadow-md rounded-lg p-4">
+                    <img src="{{ product.image is not empty ? (product.image starts with 'https://' ? product.image : 'images/' ~ product.image) : 'images/logo_nobg.png' }}" alt="{{ product.title }}" class="w-full h-48 object-cover mb-4">
+                    <h3 class="text-lg font-bold">{{ product.title }}</h3>
+                    <p>{{ product.description }}</p>
+                    <p class="font-bold">{{ product.price }} €</p>
+                    <div class="flex items-center mt-2">
+                        {% set averageRating = product.reviews|length > 0 ? (product.reviews|map(r => r.rating)|reduce((carry, item) => carry + item) / product.reviews|length) : 0 %}
+                        <div class="flex items-center cursor-pointer" onclick="openReviewModal({{ product.id }})">
+                            {% for i in 1..5 %}
+                                <i class="fa fa-star text-{{ i <= averageRating ? 'yellow' : 'gray' }}-500"></i>
+                            {% endfor %}
+                        </div>
+                        <span class="ml-2">{{ averageRating|number_format(1) }}/5 ({{ product.reviews|length }} avis)</span>
+                    </div>
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="addProductToCart({{ product.id }}, '{{ product.title }}', {{ product.price }})">Ajouter au panier</button>
+                    {% else %}
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="window.location.href='{{ path('login') }}'">Connectez vous</button>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-</div>
+
+        <!-- Review Modal -->
+        <div id="reviewModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
+            <div class="bg-white rounded-lg p-6 w-3/4 max-w-3xl">
+                <h2 class="text-2xl font-bold mb-4">Avis pour le produit</h2>
+                <div id="reviewContent"></div>
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="closeReviewModal()">Fermer</button>
+            </div>
+        </div>
+
+        
+    </div>
+{% endblock %}

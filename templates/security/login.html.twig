@@ -1,10 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion{% endblock %}
+{% block title %}
+    Connexion
+{% endblock %}
 
 {% block body %}
     <div class="container mx-auto max-w-lg p-6 bg-white shadow-md rounded-lg">
-        <h1 class="text-2xl font-bold mb-6">Connexion</h1>
+        <h1 class="text-2xl font-bold mb-6">
+            Connexion
+        </h1>
 
         {% for type, messages in app.flashes %}
             {% for message in messages %}
@@ -16,31 +20,29 @@
 
         <form action="{{ path('login') }}" method="post">
             <div class="mb-4">
-                <label for="email" class="block text-gray-700 font-bold mb-2">Adresse email</label>
-                <input type="email" id="email" name="_email" value="{{ last_email }}" required="required" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Adresse email" autocomplete="email" autofocus>
-            </div>
+                <label for="email" class="block text-gray-700 font-bold mb-2">
+                    Adresse email
+                </label>
+                <input type="email" id="email" name="_email" value="{{ last_email }}" required="required" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Adresse email" autocomplete="email" autofocus></div>
 
-            <div class="mb-4">
-                <label for="password" class="block text-gray-700 font-bold mb-2">Mot de passe</label>
-                <input type="password" id="password" name="_password" placeholder="Mot de passe" required="required" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autocomplete="current-password">
-            </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-700 font-bold mb-2">
+                        Mot de passe
+                    </label>
+                    <input type="password" id="password" name="_password" placeholder="Mot de passe" required="required" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autocomplete="current-password"></div>
 
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Se connecter</button>
-        </form>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Se connecter
+                    </button>
+                </form>
 
-        <a class="text-blue-500 hover:text-blue-700 mt-4 inline-block align-baseline font-bold text-sm" href="{{ path('forgotpassword') }}">
-            Vous avez oublié votre mot de passe ?
-        </a>
-        <br>
-        <a class="text-blue-500 hover:text-blue-700 mt-4 inline-block align-baseline font-bold text-sm" href="{{ path('register') }}">
-            Vous n'avez pas de compte ? Inscrivez-vous
-        </a>
-    </div>
-
-    <script>
-        // script permettant d'empecher le renvoie de formulaire
-        if (window.history.replaceState) {
-            window.history.replaceState(null, null, window.location.href);
-        }
-    </script>
-{% endblock %}
+                <a class="text-blue-500 hover:text-blue-700 mt-4 inline-block align-baseline font-bold text-sm" href="{{ path('forgotpassword') }}">
+                    Vous avez oublié votre mot de passe ?
+                </a>
+                <br>
+                    <a class="text-blue-500 hover:text-blue-700 mt-4 inline-block align-baseline font-bold text-sm" href="{{ path('register') }}">
+                        Vous n'avez pas de compte ? Inscrivez-vous
+                    </a>
+                </div>
+            {% endblock %}
+            

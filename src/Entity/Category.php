@@ -21,16 +21,13 @@ class Category
     #[ORM\Column(length: 1000)]
     private ?string $description = null;
 
-    /**
-     * @var Collection<int, Product>
-     */
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category')]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $products;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Menu::class)]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Menu::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $menus;
 
     public function __construct()

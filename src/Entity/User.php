@@ -73,13 +73,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "json")]
     private array $roles = [];
 
-    #[ORM\OneToMany(mappedBy: "user", targetEntity: Order::class)]
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: Order::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $orders;
 
-    #[ORM\OneToMany(mappedBy: "user", targetEntity: Review::class)]
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: Review::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $reviews;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $addresses;
 
     public function __construct()

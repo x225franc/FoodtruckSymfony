@@ -14,11 +14,11 @@ class OrderProduct
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: "orderProducts", cascade: ["remove"])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Order $order = null;
 
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "orderProducts")]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Product $product = null;
 
     #[ORM\Column(type: "integer")]

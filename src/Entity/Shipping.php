@@ -20,7 +20,7 @@ class Shipping
     private ?string $withdrawal = null;
 
     #[ORM\OneToOne(targetEntity: Order::class, inversedBy: "shipping")]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Order $order = null;
 
     public function __construct()
