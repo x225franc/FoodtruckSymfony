@@ -3,52 +3,58 @@
     Partagez votre Avis
 {% endblock %}
 {% block body %}
-<div class="mx-64 mt-10 p-6 bg-white rounded-lg shadow-md">
-    <h2 class="text-2xl font-bold text-center mb-6">
-        Partagez votre Avis !
-    </h2>
-    {% if reviewableItems|length > 0 %}
-        <form method="POST">
-            {% for item in reviewableItems %}
-                <div class="mb-4">
-                    <h3 class="text-xl font-bold">
-                        {{ item.product.title }}
-                    </h3>
-                    <input type="hidden" name="product_id[]" value="{{ item.product.id }}">
-                        <label for="rating_{{ item.product.id }}" class="block text-gray-700 font-bold mb-2">
-                            Note
-                        </label>
-                        <select id="rating_{{ item.product.id }}" name="rating[]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                            <option value="1">
-                                1 étoile
-                            </option>
-                            <option value="2">
-                                2 étoiles
-                            </option>
-                            <option value="3">
-                                3 étoiles
-                            </option>
-                            <option value="4">
-                                4 étoiles
-                            </option>
-                            <option value="5">
-                                5 étoiles
-                            </option>
-                        </select>
-                        <label for="comment_{{ item.product.id }}" class="block text-gray-700 font-bold mb-2">
-                            Commentaire
-                        </label>
-                        <textarea id="comment_{{ item.product.id }}" name="comment[]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4" required></textarea>
-                    </div>
-                {% endfor %}
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Soumettre
-                </button>
-            </form>
-        {% else %}
-            <p class="text-center text-xl text-gray-600">
-                Aucun produit à évaluer.
-            </p>
-        {% endif %}
-    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+        <script>
+    window.location.href = "{{ path('home') }}";
+</script>
+    {% endif %}
+    <div class="mx-64 mt-10 p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold text-center mb-6">
+            Partagez votre Avis !
+        </h2>
+        {% if reviewableItems|length > 0 %}
+            <form method="POST">
+                {% for item in reviewableItems %}
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold">
+                            {{ item.product.title }}
+                        </h3>
+                        <input type="hidden" name="product_id[]" value="{{ item.product.id }}">
+                            <label for="rating_{{ item.product.id }}" class="block text-gray-700 font-bold mb-2">
+                                Note
+                            </label>
+                            <select id="rating_{{ item.product.id }}" name="rating[]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                                <option value="1">
+                                    1 étoile
+                                </option>
+                                <option value="2">
+                                    2 étoiles
+                                </option>
+                                <option value="3">
+                                    3 étoiles
+                                </option>
+                                <option value="4">
+                                    4 étoiles
+                                </option>
+                                <option value="5">
+                                    5 étoiles
+                                </option>
+                            </select>
+                            <label for="comment_{{ item.product.id }}" class="block text-gray-700 font-bold mb-2">
+                                Commentaire
+                            </label>
+                            <textarea id="comment_{{ item.product.id }}" name="comment[]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4" required></textarea>
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Soumettre
+                    </button>
+                </form>
+            {% else %}
+                <p class="text-center text-xl text-gray-600">
+                    Aucun produit à évaluer.
+                </p>
+            {% endif %}
+        </div>
+    {% endblock %}
     

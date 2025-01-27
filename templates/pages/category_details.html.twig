@@ -52,7 +52,7 @@
                         {% set averageRating = product.reviews|length > 0 ? (product.reviews|map(r => r.rating)|reduce((carry, item) => carry + item) / product.reviews|length) : 0 %}
                         <div class="flex items-center cursor-pointer" onclick="openReviewModal({{ product.id }})">
                             {% for i in 1..5 %}
-                                <i class="fa fa-star text-{{ i <= averageRating ? 'yellow' : 'gray' }}-500"></i>
+                                <i class="fa fa-star text-{{ i <= averageRating ? 'blue' : 'gray' }}-500"></i>
                             {% endfor %}
                         </div>
                         <span class="ml-2">{{ averageRating|number_format(1) }}/5 ({{ product.reviews|length }} avis)</span>

@@ -106,7 +106,7 @@ class SecurityController extends AbstractController
                 // Message de succès
                 $this->addFlash('success', 'Votre compte a été créé avec succès.');
 
-                return $this->redirectToRoute('home');
+                return $this->redirectToRoute('login');
             }
         }
 

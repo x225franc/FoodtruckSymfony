@@ -107,7 +107,6 @@
     </form>
 </div>
 
-    {% block javascripts %}
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -138,5 +137,4 @@
                 cartInput.value = JSON.stringify(cart);
             });
 </script>
-    {% endblock %}
 {% endblock %}

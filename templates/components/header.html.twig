@@ -2,59 +2,59 @@
     <div class="container mx-auto flex justify-between items-center">
         <a class="text-white text-xl font-bold flex items-center" href="{{ path('home') }}">
             <img src="{{ asset('images/logo_nobg.png') }}" alt="logo" class="w-14">
-            <img src="{{ asset('images/text.png') }}" alt="logo" class="w-56">
-        </a>
-        <div class="flex items-center w-auto">
-            <ul class="flex justify-between text-white">
-                {% if is_granted('ROLE_ADMIN') %}
-                    <li class="px-4 py-2">
-                        <a class="hover:text-gray-400" href="{{ path('admin') }}">
-                            Admin
-                        </a>
-                    </li>
-                {% endif %}
-                <li class="px-4 py-2">
-                    <a class="hover:text-gray-400" href="{{ path('home') }}">
-                        Menu
-                    </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a class="hover:text-gray-400" href="{{ path('contact') }}">
-                        Contact
-                    </a>
-                </li>
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <li class="px-4 py-2 relative">
-                        <a class="hover:text-gray-400" href="{{ path('review') }}">
-                            Avis
-                        </a>
-                        {% if reviewableItemsCount() > 0 %}
-                            <span class="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs px-2 py-1">
-                                {{ reviewableItemsCount() }}
-                            </span>
+                <img src="{{ asset('images/text.png') }}" alt="logo" class="w-56"></a>
+                <div class="flex items-center w-auto">
+                    <ul class="flex justify-between text-white">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="px-4 py-2">
+                                <a class="hover:text-gray-400" href="{{ path('admin') }}">
+                                    Admin
+                                </a>
+                            </li>
                         {% endif %}
-                    </li>
-                    <li class="px-4 py-2">
-                        <a class="hover:text-gray-400" href="{{ path('logout') }}" onclick="clearCartBeforeLogout()">
-                            Déconnexion
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="px-4 py-2">
-                        <a class="hover:text-gray-400" href="{{ path('login') }}">
-                            Connexion
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
-</header>
-
-    {% block javascripts %}
+                        {% if not is_granted('ROLE_ADMIN') %}
+                            <li class="px-4 py-2">
+                                <a class="hover:text-gray-400" href="{{ path('home') }}">
+                                    Menu
+                                </a>
+                            </li>
+                            <li class="px-4 py-2">
+                                <a class="hover:text-gray-400" href="{{ path('contact') }}">
+                                    Contact
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            {% if not is_granted('ROLE_ADMIN') %}
+                                <li class="px-4 py-2 relative">
+                                    <a class="hover:text-gray-400" href="{{ path('review') }}">
+                                        Avis
+                                    </a>
+                                    {% if reviewableItemsCount() > 0 %}
+                                        <span class="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs px-2 py-1">
+                                            {{ reviewableItemsCount() }}
+                                        </span>
+                                    {% endif %}
+                                {% endif %}
+                            </li>
+                            <li class="px-4 py-2">
+                                <a class="hover:text-gray-400" href="{{ path('logout') }}" onclick="clearCartBeforeLogout()">
+                                    Déconnexion
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="px-4 py-2">
+                                <a class="hover:text-gray-400" href="{{ path('login') }}">
+                                    Connexion
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </header>
         <script>
             function clearCartBeforeLogout() {
                 localStorage.removeItem('cart'); // Supprime le panier du localStorage
             }
         </script>
-    {% endblock %}

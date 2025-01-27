@@ -51,7 +51,6 @@
 			{% include 'components/cart.html.twig' %}
 		{% endif %}
 
-        {% block javascripts %}
             <script>
             function showCategoryDetails(categoryId) {
                 // Hide the category view and show the details view
@@ -177,7 +176,7 @@
                                 reviewElement.innerHTML = `
                                     <div class="flex items-center">
                                         ${[...Array(5)].map((_, i) => `
-                                        <i class="fa fa-star text-${i < review.rating ? 'yellow' : 'gray'}-500"></i>
+                                        <i class="fa fa-star text-${i < review.rating ? 'blue' : 'gray'}-500"></i>
                                         `).join('')}
                                     </div>
                                     <p>${review.comment}</p>
@@ -196,5 +195,4 @@
         // </script>
 
         </script>
-        {% endblock %}
 	{% endblock %}
