@@ -23,6 +23,9 @@ class AppFixtures extends Fixture
     private $passwordHasher;
     private $picsumService;
 
+
+    // Injecter le service UserPasswordHasherInterface pour hasher les mots de passe
+    // Injecter le service PicsumService pour récupérer des images aléatoires
     public function __construct(UserPasswordHasherInterface $passwordHasher, PicsumService $picsumService)
     {
         $this->passwordHasher = $passwordHasher;

@@ -57,12 +57,6 @@
                             </a>
                         </li>
 
-                        {# <li>
-                            <a href="#" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="#">
-                            <i class="fas fa-info"></i>
-                            </a>
-                        </li> #}
-
                         <li class="mt-auto">
                             <a href="/" class="flex items-center justify-center p-4 hover:bg-green-800 w-full" title="Retourner à l'accueil">
                                 <i class="fas fa-home"></i>
@@ -72,13 +66,11 @@
                 </div>
             </div>
 
-            <!-- Main Content -->
             <div class="flex-1">
                 {% block admin_content %}{% endblock %}
             </div>
         </div>
 
-        <!-- Footer -->
         <footer class="bg-gray-800 text-white p-4 text-center">
             &copy;
             {{ "now"|date("Y") }}

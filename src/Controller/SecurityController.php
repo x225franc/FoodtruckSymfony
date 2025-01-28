@@ -25,7 +25,6 @@ class SecurityController extends AbstractController
     {
         $errors = [];
 
-        // Validate using Symfony's validator
         $validationErrors = $validator->validate($user);
 
         foreach ($validationErrors as $violation) {
@@ -58,13 +57,11 @@ class SecurityController extends AbstractController
             $errors[] = 'L\'email n\'est pas valide.';
         }
 
-        // Check for unique email
         $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
         if ($existingUser) {
             $errors[] = 'Cet email est déjà utilisé.';
         }
 
-        // Check for unique username
         $existingUser = $entityManager->getRepository(User::class)->findOneBy(['username' => $user->getUsername()]);
         if ($existingUser) {
             $errors[] = 'Ce nom d\'utilisateur est déjà pris.';
@@ -98,7 +95,7 @@ class SecurityController extends AbstractController
                 $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
                 $user->setPassword($hashedPassword);
 
-                $user->setRoles(['ROLE_USER']); // Par défaut, l'utilisateur a le rôle ROLE_USER
+                $user->setRoles(['ROLE_USER']);
 
                 $entityManager->persist($user);
                 $entityManager->flush();

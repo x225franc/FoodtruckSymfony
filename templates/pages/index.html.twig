@@ -1,63 +1,61 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Accueil
+    Accueil
 {% endblock %}
 
 {% block body %}
-	<div	class="container mx-auto p-4">
+    <div class="container mx-auto p-4">
 
-		<h1	class="text-4xl font-bold mb-4">
-			Bienvenue à la Burgererie !
-		</h1>
+        <h1 class="text-4xl font-bold mb-4">
+            Bienvenue à la Burgererie !
+        </h1>
 
-		{% if categories|length > 0 %}
-			<div	id="category-view">
-				<h1	class="text-2xl font-bold mt-8 mb-4">
-					Veuillez sélectionner une catégorie
-				</h1>
-				<div	class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
-					{% for category in categories %}
-						<div	class="bg-white shadow-md rounded-lg p-4 cursor-pointer"	onclick="showCategoryDetails({{ category.id }})">
-								<img src="{{ category.image is not empty ? (category.image starts with 'https://' ? category.image : 'images/' ~ category.image) : 'images/logo_nobg.png' }}" alt="{{ category.title }}" class="w-full h-56 object-cover mb-4">
-								<h2	class="text-xl font-bold">
-									{{ category.title }}
-								</h2>
-								<p>
-									{{ category.description }}
-								</p>
-							</div>
-						{% endfor %}
-					</div>
-				</div>
+        {% if categories|length > 0 %}
+            <div id="category-view">
+                <h1 class="text-2xl font-bold mt-8 mb-4">
+                    Veuillez sélectionner une catégorie
+                </h1>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+                    {% for category in categories %}
+                        <div class="bg-white shadow-md rounded-lg p-4 cursor-pointer" onclick="showCategoryDetails({{ category.id }})">
+                            <img src="{{ category.image is not empty ? (category.image starts with 'https://' ? category.image : 'images/' ~ category.image) : 'images/logo_nobg.png' }}" alt="{{ category.title }}" class="w-full h-56 object-cover mb-4">
+                                <h2 class="text-xl font-bold">
+                                    {{ category.title }}
+                                </h2>
+                                <p>
+                                    {{ category.description }}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
 
-				<div	id="details-view"	class="hidden">
-					<button	class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"	onclick="showCategoryView()">
-						<i	class="fa fa-arrow-left">
-							Retour
-						</i>
-					</button>
-					<div	id="details-content"></div>
-				</div>
-			{% else %}
-				<h1	class="text-2xl font-bold mt-8 mb-4">
-					Aucune catégorie n'a été trouvée.
-					Veuillez réessayer plus tard.
-				</h1>
-			{% endif %}
-		</div>
+                <div id="details-view" class="hidden">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4" onclick="showCategoryView()">
+                        <i class="fa fa-arrow-left">
+                            Retour
+                        </i>
+                    </button>
+                    <div id="details-content"></div>
+                </div>
+            {% else %}
+                <h1 class="text-2xl font-bold mt-8 mb-4">
+                    Aucune catégorie n'a été trouvée.
+                    Veuillez réessayer plus tard.
+                </h1>
+            {% endif %}
+        </div>
 
-		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-			{% include 'components/cart.html.twig' %}
-		{% endif %}
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {% include 'components/cart.html.twig' %}
+        {% endif %}
 
-            <script>
+        <script>
             function showCategoryDetails(categoryId) {
-                // Hide the category view and show the details view
                 document.getElementById('category-view').classList.add('hidden');
                 document.getElementById('details-view').classList.remove('hidden');
 
-                // Fetch the category details via AJAX
                 fetch(`/category-details/${categoryId}`)
                     .then(response => response.text())
                     .then(html => {
@@ -66,7 +64,6 @@
             }
 
             function showCategoryView() {
-                // Hide the details view and show the category view
                 document.getElementById('details-view').classList.add('hidden');
                 document.getElementById('category-view').classList.remove('hidden');
             }
@@ -154,13 +151,12 @@
         document.addEventListener("DOMContentLoaded", function () {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('clearCart')) {
-                localStorage.removeItem('cart'); // Supprime le panier
-                urlParams.delete('clearCart'); // Supprime le paramètre de l'URL
-                window.location.replace(window.location.pathname); // Recharge la page proprement
+                localStorage.removeItem('cart');
+                urlParams.delete('clearCart');
+                window.location.replace(window.location.pathname)
             }
         });
 
-        // <script>
             function openReviewModal(productId) {
                 fetch(`/api/products/${productId}/reviews`)
                     .then(response => response.json())
@@ -192,7 +188,7 @@
             function closeReviewModal() {
                 document.getElementById('reviewModal').classList.add('hidden');
             }
-        // </script>
 
         </script>
-	{% endblock %}
+    {% endblock %}
+    

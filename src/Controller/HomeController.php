@@ -52,14 +52,12 @@ class HomeController extends AbstractController
             $subject = $request->request->get('subject');
             $message = $request->request->get('message');
 
-            // Debugging: Check the type of $email
             dump($email);
 
             if (!is_string($email)) {
                 throw new \InvalidArgumentException('Email doit être une chaîne de caractères.');
             }
 
-            // Store the message in the contact_message table
             $contactMessage = new ContactMessage();
             $contactMessage->setEmail($email);
             $contactMessage->setSubject($subject);

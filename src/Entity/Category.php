@@ -127,7 +127,6 @@ class Category
     public function removeMenu(Menu $menu): self
     {
         if ($this->menus->removeElement($menu)) {
-            // set the owning side to null (unless already changed)
             if ($menu->getCategory() === $this) {
                 $menu->setCategory(null);
             }

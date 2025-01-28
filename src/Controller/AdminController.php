@@ -19,16 +19,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-// use Symfony\Component\String\Slugger\SluggerInterface;
-// use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class AdminController extends AbstractController
 {
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        // Check if the user is logged in and has the role ROLE_ADMIN
-        // $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         return $this->render('admin/admin.html.twig');
     }
@@ -95,7 +91,6 @@ class AdminController extends AbstractController
             </table>
         </div>
     </div>');
-
 
         $mailer->send($email);
 
@@ -362,7 +357,7 @@ class AdminController extends AbstractController
                 $menu->setName($request->request->get('name'));
                 $menu->setDescription($request->request->get('description'));
                 $menu->setCategory($entityManager->getRepository(Category::class)->find($request->request->get('category_id')));
-
+    
                 $productIds = $request->request->all('products');
                 foreach ($productIds as $productId) {
                     $product = $entityManager->getRepository(Product::class)->find($productId);
@@ -370,12 +365,12 @@ class AdminController extends AbstractController
                         $menu->addProduct($product);
                     }
                 }
-
+    
                 /** @var UploadedFile $imageFile */
                 $imageFile = $request->files->get('image');
                 if ($imageFile && in_array($imageFile->getMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
                     $newFilename = bin2hex(random_bytes(10)) . '.' . $imageFile->guessExtension();
-
+    
                     try {
                         $imageFile->move(
                             $this->getParameter('images_directory'),
@@ -383,10 +378,10 @@ class AdminController extends AbstractController
                         );
                     } catch (FileException $e) {
                     }
-
+    
                     $menu->setImage($newFilename);
                 }
-
+    
                 $entityManager->persist($menu);
                 $entityManager->flush();
                 $this->addFlash('success', 'Menu ajouté avec succès');
@@ -396,21 +391,12 @@ class AdminController extends AbstractController
                     $menu->setName($request->request->get('name'));
                     $menu->setDescription($request->request->get('description'));
                     $menu->setCategory($entityManager->getRepository(Category::class)->find($request->request->get('category_id')));
-
-                    $menu->getProducts()->clear();
-                    $productIds = $request->request->all('products');
-                    foreach ($productIds as $productId) {
-                        $product = $entityManager->getRepository(Product::class)->find($productId);
-                        if ($product) {
-                            $menu->addProduct($product);
-                        }
-                    }
-
+    
                     /** @var UploadedFile $imageFile */
                     $imageFile = $request->files->get('image');
                     if ($imageFile && in_array($imageFile->getMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
                         $newFilename = bin2hex(random_bytes(10)) . '.' . $imageFile->guessExtension();
-
+    
                         try {
                             $imageFile->move(
                                 $this->getParameter('images_directory'),
@@ -418,10 +404,10 @@ class AdminController extends AbstractController
                             );
                         } catch (FileException $e) {
                         }
-
+    
                         $menu->setImage($newFilename);
                     }
-
+    
                     $entityManager->flush();
                     $this->addFlash('success', 'Menu modifié avec succès');
                 } else {
@@ -436,7 +422,7 @@ class AdminController extends AbstractController
                             unlink($imagePath);
                         }
                     }
-
+    
                     $entityManager->remove($menu);
                     $entityManager->flush();
                     $this->addFlash('success', 'Menu supprimé avec succès');
@@ -445,11 +431,11 @@ class AdminController extends AbstractController
                 }
             }
         }
-
+    
         $menus = $entityManager->getRepository(Menu::class)->findAll();
         $products = $entityManager->getRepository(Product::class)->findAll();
         $categories = $entityManager->getRepository(Category::class)->findAll();
-
+    
         return $this->render('admin/adminMenu.html.twig', [
             'menus' => $menus,
             'products' => $products,
@@ -552,7 +538,6 @@ class AdminController extends AbstractController
         $order->setUpdatedAt(new \DateTime());
         $entityManager->flush();
 
-        // Send email to the user
         $user = $order->getUser();
         $email = (new Email())
             ->from($_ENV['MAIL_USER'])

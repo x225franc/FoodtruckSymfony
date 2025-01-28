@@ -3,7 +3,7 @@ framework:
     secret: '%env(APP_SECRET)%'
 
 # commenter cette ligne permet de désactiver l'erreur 404 personnalisée
-    # error_controller: 'App\Controller\ErrorController::showException'
+    error_controller: 'App\Controller\ErrorController::showException'
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true

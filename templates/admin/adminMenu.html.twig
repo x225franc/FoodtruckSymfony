@@ -1,9 +1,7 @@
 {% extends 'base.admin.html.twig' %}
-
 {% block title %}
     Menus - Admin
 {% endblock %}
-
 {% block admin_content %}
     <div class="p-6">
         <h2 class="text-2xl font-bold text-green-600 mb-6">
@@ -45,7 +43,9 @@
                             <label for="products" class="block text-gray-700 font-bold mb-2">
                                 Produits
                             </label>
-                            <i class="text-gray-500">Appuyez sur Ctrl pour sélectionner plusieurs produits</i>
+                            <i class="text-gray-500">
+                                Appuyez sur Ctrl pour sélectionner plusieurs produits
+                            </i>
                             <select multiple class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="products" name="products[]">
                                 {% for product in products %}
                                     <option value="{{ product.id }}">
@@ -70,7 +70,6 @@
                             </p>
                         </div>
                     {% endif %}
-
                     <h4 class="text-xl font-bold mb-4">
                         Liste des menus
                     </h4>
@@ -115,63 +114,64 @@
                                                         </td>
                                                         <td class="px-6 py-4 whitespace-nowrap">
                                                             <input type="hidden" name="id" value="{{ menu.id }}">
-                                                                <input type="text" name="name" value="{{ menu.name }}" required class="w-full bg-transparent focus:outline-none focus:ring-2 focus:ring-green-500 rounded px-2 py-1"></td>
-                                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                                    <textarea name="description" required class="w-full bg-transparent focus:outline-none focus:ring-2 focus:ring-green-500 rounded px-2 py-1">
-                                                                        {{ menu.description }}
-                                                                    </textarea>
-                                                                </td>
-                                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                                    {% if menu.image %}
-                                                                        <a href="{{ asset('images/' ~ menu.image) }}" target="_blank" class="text-green-600 hover:text-green-700">
-                                                                            Voir l'image
-                                                                        </a>
-                                                                    {% endif %}
-                                                                    {% if not menu.image %}
-                                                                        <span>
-                                                                            Aucune image
-                                                                        </span>
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                                    <ul>
-                                                                        {% for product in menu.products %}
-                                                                            <li>
-                                                                                {{ product.title }}
-                                                                            </li>
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </td>
-                                                                <td class="px-6 py-4 whitespace-nowrap space-x-2">
-                                                                    <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded" name="edit_menu">
-                                                                        Modifier
-                                                                    </button>
-                                                                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded" name="delete_menu">
-                                                                        Supprimer
-                                                                    </button>
-                                                                </td>
-                                                            </form>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        {% else %}
-                                            <h4 class="text-xl">
-                                                Catégorie :
-                                                {{ category.title }}
-                                            </h4>
-                                            <div class="text-center fs-3">
-                                                Aucun menu trouvé pour cette catégorie
-                                            </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% else %}
-                                    <p class="text-center text-xl text-gray-600">
-                                        Aucun menu trouvé
-                                    </p>
-                                {% endif %}
+                                                                <input type="hidden" name="category_id" value="{{ menu.category.id }}">
+                                                                    <input type="text" name="name" value="{{ menu.name }}" required class="w-full bg-transparent focus:outline-none focus:ring-2 focus:ring-green-500 rounded px-2 py-1"></td>
+                                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                                        <textarea name="description" required class="w-full bg-transparent focus:outline-none focus:ring-2 focus:ring-green-500 rounded px-2 py-1">
+                                                                            {{ menu.description }}
+                                                                        </textarea>
+                                                                    </td>
+                                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                                        {% if menu.image %}
+                                                                            <a href="{{ asset('images/' ~ menu.image) }}" target="_blank" class="text-green-600 hover:text-green-700">
+                                                                                Voir l'image
+                                                                            </a>
+                                                                        {% endif %}
+                                                                        {% if not menu.image %}
+                                                                            <span>
+                                                                                Aucune image
+                                                                            </span>
+                                                                        {% endif %}
+                                                                    </td>
+                                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                                        <ul>
+                                                                            {% for product in menu.products %}
+                                                                                <li>
+                                                                                    {{ product.title }}
+                                                                                </li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                    </td>
+                                                                    <td class="px-6 py-4 whitespace-nowrap space-x-2">
+                                                                        <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded" name="edit_menu">
+                                                                            Modifier
+                                                                        </button>
+                                                                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded" name="delete_menu">
+                                                                            Supprimer
+                                                                        </button>
+                                                                    </td>
+                                                                </form>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            {% else %}
+                                                <h4 class="text-xl">
+                                                    Catégorie :
+                                                    {{ category.title }}
+                                                </h4>
+                                                <div class="text-center fs-3">
+                                                    Aucun menu trouvé pour cette catégorie
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <p class="text-center text-xl text-gray-600">
+                                            Aucun menu trouvé
+                                        </p>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endblock %}
-                
+                    {% endblock %}
+                    
