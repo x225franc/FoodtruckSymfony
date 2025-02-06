@@ -13,6 +13,7 @@
         "doctrine/orm": "^3.3",
         "fakerphp/faker": "^1.24",
         "php-flasher/flasher-symfony": "^2.1",
+        "symfony/apache-pack": "^1.0",
         "symfony/asset": "^7.2",
         "symfony/console": "7.2.*",
         "symfony/css-selector": "7.2.*",
