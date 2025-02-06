@@ -73,4 +73,7 @@ Connectez-vous avec les comptes de test créés par les fixtures :
 - **Utilisateur** : user@user.fr / 123
 - **Utilisateur banni** : banned@banned.fr / 123
 
+
+PS : Vous pouvez vous crée un compte custom pour tester les envois de mails.
+
 Testez !
