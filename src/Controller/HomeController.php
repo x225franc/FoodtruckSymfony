@@ -65,8 +65,6 @@ class HomeController extends AbstractController
             $contactMessage->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($contactMessage);
             $entityManager->flush();
-
-            // Récupérer tous les admins
             $adminUsers = $userRepository->findByRole('ROLE_ADMIN');
 
             foreach ($adminUsers as $admin) {
@@ -105,7 +103,6 @@ class HomeController extends AbstractController
         </table>
     </div>';
 
-                // Création et envoi de l'email
                 $emailMessage = (new Email())
                     ->from($email)
                     ->to($admin->getEmail())

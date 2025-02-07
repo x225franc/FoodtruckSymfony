@@ -24,8 +24,7 @@ class AppFixtures extends Fixture
     private $picsumService;
 
 
-    // Injecter le service UserPasswordHasherInterface pour hasher les mots de passe
-    // Injecter le service PicsumService pour récupérer des images aléatoires
+
     public function __construct(UserPasswordHasherInterface $passwordHasher, PicsumService $picsumService)
     {
         $this->passwordHasher = $passwordHasher;
@@ -40,7 +39,6 @@ class AppFixtures extends Fixture
 
         $roles = ['ROLE_USER', 'ROLE_BANNED', 'ROLE_ADMIN'];
 
-        // Création de 10 utilisateurs
         $users = [];
         for ($i = 0; $i < 10; $i++) {
             $user = new User();
@@ -57,7 +55,6 @@ class AppFixtures extends Fixture
             $users[] = $user;
         }
 
-        // Création de 3 utilisateurs spéciaux
         $specialUsers = [
             ['email' => 'admin@admin.fr', 'role' => 'ROLE_ADMIN'],
             ['email' => 'user@user.fr', 'role' => 'ROLE_USER'],
@@ -79,7 +76,6 @@ class AppFixtures extends Fixture
             $users[] = $user;
         }
 
-        // Création de 5 catégories
         $categories = [];
         for ($i = 0; $i < 5; $i++) {
             $category = new Category();
@@ -91,7 +87,6 @@ class AppFixtures extends Fixture
             $categories[] = $category;
         }
 
-        // Création de 10 produits par catégorie
         $products = [];
         foreach ($categories as $category) {
             for ($i = 0; $i < 10; $i++) {
@@ -107,7 +102,6 @@ class AppFixtures extends Fixture
             }
         }
 
-        // Création de 5 menus par catégorie
         $menus = [];
         foreach ($categories as $category) {
             for ($i = 0; $i < 5; $i++) {
@@ -126,7 +120,6 @@ class AppFixtures extends Fixture
             }
         }
 
-        // Création de 2 adresses par utilisateur
         $addresses = [];
         foreach ($users as $user) {
             for ($i = 0; $i < 2; $i++) {
@@ -144,7 +137,6 @@ class AppFixtures extends Fixture
             }
         }
 
-        // Création de 3 commandes par utilisateur
         $orders = [];
         foreach ($users as $user) {
             for ($i = 0; $i < 3; $i++) {
@@ -163,7 +155,6 @@ class AppFixtures extends Fixture
             }
         }
 
-        // Création de 5 produits par commande
         foreach ($orders as $order) {
             for ($i = 0; $i < 5; $i++) {
                 $orderProduct = new OrderProduct();
@@ -176,7 +167,6 @@ class AppFixtures extends Fixture
             }
         }
 
-        // Création de 5 avis par utilisateur
         foreach ($users as $user) {
             for ($i = 0; $i < 5; $i++) {
                 $review = new Review();
@@ -190,7 +180,6 @@ class AppFixtures extends Fixture
             }
         }
 
-        // Création de 5 livraisons par commande
         $withdrawalOptions = ['demain', 'demain_plus_un', 'demain_plus_deux', 'demain_plus_trois'];
 
         foreach ($orders as $index => $order) {
@@ -202,7 +191,6 @@ class AppFixtures extends Fixture
             $manager->persist($shipping);
         }
 
-        // Création de 10 messages de contact
         for ($i = 0; $i < 10; $i++) {
             $contactMessage = new ContactMessage();
             $contactMessage->setEmail($faker->email)

@@ -20,9 +20,7 @@ class ExceptionListener
     {
         $exception = $event->getThrowable();
 
-        // Vérifie si l'exception est une erreur 404
         if ($exception instanceof NotFoundHttpException) {
-            // Redirige vers la route 'error_404' qui gère les erreurs 404
             $response = new RedirectResponse($this->router->generate('error_404'));
             $event->setResponse($response);
         }

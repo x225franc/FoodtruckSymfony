@@ -73,7 +73,6 @@ class SecurityController extends AbstractController
     #[Route('/register', name: 'register')]
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
-        // Redirige l'utilisateur connecté vers la page d'accueil
         if ($this->getUser()) {
             return $this->redirectToRoute('home');
         }
@@ -91,7 +90,6 @@ class SecurityController extends AbstractController
                     $this->addFlash('error', $error);
                 }
             } else {
-                // Hash du mot de passe
                 $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
                 $user->setPassword($hashedPassword);
 
@@ -100,7 +98,6 @@ class SecurityController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                // Message de succès
                 $this->addFlash('success', 'Votre compte a été créé avec succès.');
 
                 return $this->redirectToRoute('login');
@@ -119,13 +116,10 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
-        // Récupère les erreurs de la dernière tentative de connexion
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        // Récupère le dernier email utilisé pour la connexion
         $lastEmail = $authenticationUtils->getLastUsername();
 
-        // Ajoute le flash uniquement en cas d'erreur
         if ($error) {
             if ($error instanceof CustomUserMessageAuthenticationException && $error->getMessageKey() === 'Votre compte a été banni. Vous ne pouvez pas vous connecter.') {
                 return $this->redirectToRoute('banned');
@@ -149,7 +143,6 @@ class SecurityController extends AbstractController
     #[Route("/logout", name: "logout")]
     public function logout(Security $security): Response
     {
-        // Le processus de déconnexion est géré par Symfony automatiquement
         $security->logout();
 
         return $this->redirectToRoute('home');
@@ -165,18 +158,15 @@ class SecurityController extends AbstractController
         if ($request->isMethod('POST')) {
             $email = $request->request->get('email');
 
-            // Recherche de l'utilisateur
             $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
             if ($user) {
-                // Génération d'un jeton unique
                 $resetToken = bin2hex(random_bytes(32));
                 $user->setResetToken($resetToken);
-                $user->setResetTokenExpiresAt(new \DateTime('+1 hour')); // Expire dans 1 heure
+                $user->setResetTokenExpiresAt(new \DateTime('+1 hour')); 
 
                 $entityManager->flush();
 
-                // Envoi de l'email
                 $resetPasswordUrl = $this->generateUrl('resetpassword', ['token' => $resetToken], UrlGeneratorInterface::ABSOLUTE_URL);
 
                 $emailMessage = (new Email())

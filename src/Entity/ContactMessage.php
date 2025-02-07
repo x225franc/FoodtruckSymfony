@@ -30,7 +30,6 @@ class ContactMessage
         $this->createdAt = new \DateTimeImmutable();
     }
 
-    // Getters and setters
     public function getId(): ?int
     {
         return $this->id;

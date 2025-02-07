@@ -40,7 +40,6 @@ class Menu
         $this->products = new ArrayCollection();
     }
 
-    // Getters and setters
     public function getId(): ?int
     {
         return $this->id;

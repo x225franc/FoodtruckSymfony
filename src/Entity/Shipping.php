@@ -27,7 +27,6 @@ class Shipping
     {
     }
 
-    // Getters and setters
     public function getId(): ?int
     {
         return $this->id;

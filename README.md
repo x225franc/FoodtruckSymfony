@@ -77,3 +77,6 @@ Connectez-vous avec les comptes de test créés par les fixtures :
 PS : Vous pouvez vous crée un compte custom pour tester les envois de mails.
 
 Testez !
+
+
+# lien production (wip) : https://foodtrucksymfony.dealo.re

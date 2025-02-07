@@ -322,7 +322,6 @@ class AdminController extends AbstractController
                         }
                     }
 
-                    // Remove product from all menus
                     $menus = $entityManager->getRepository(Menu::class)->findAll();
                     foreach ($menus as $menu) {
                         if ($menu->getProducts()->contains($product)) {

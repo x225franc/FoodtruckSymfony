@@ -8,8 +8,6 @@
     </title>
     <!-- Tailwind CSS -->
     <link href="{{ asset('build/app.css') }}" rel="stylesheet" />
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}" />
     <!-- Font Awesome CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/app.min.css') }}" />
@@ -19,7 +17,6 @@
     {% set current_route = app.request.get('_route') %}
     {% set definedRoutes = ['home' , 'login', 'register', 'about', 'contact' , 'forgotpassword' , 'resetpassword' , 'order', 'contact', 'review'] %}
 
-    {# Include header component #}
     {% if current_route in definedRoutes %}
       {% include 'components/header.html.twig' %}
     {% endif %}
@@ -32,7 +29,6 @@
         {% block body %}{% endblock %}
       </main>
 
-      {# Include footer component #}
       {% if current_route in definedRoutes %}
         {% include 'components/footer.html.twig' %}
       {% endif %}
@@ -40,7 +36,6 @@
 </html>
 
 <script>
-        // script permettant d'empecher le renvoie de formulaire 
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }

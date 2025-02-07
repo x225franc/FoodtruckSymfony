@@ -24,7 +24,6 @@ class ProductVoter extends Voter
             return false;
         }
 
-        // On verifie si l'utilisateur est autorisé à modifier le produit
         switch ($attribute) {
             case self::EDIT:
                 return $subject->getOwner() === $user || in_array('ROLE_ADMIN', $user->getRoles());
